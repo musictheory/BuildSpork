@@ -1,0 +1,437 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5530D7FC1A6E548800CFEBE9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D7F81A6E548700CFEBE9 /* AppDelegate.m */; };
+		5530D7FD1A6E548800CFEBE9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D7F91A6E548700CFEBE9 /* main.m */; };
+		5530D8051A6E553B00CFEBE9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5530D8031A6E553B00CFEBE9 /* Images.xcassets */; };
+		5530D8081A6E554A00CFEBE9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5530D8061A6E554A00CFEBE9 /* MainMenu.xib */; };
+		5530D8161A6E568B00CFEBE9 /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D8151A6E568B00CFEBE9 /* Project.m */; };
+		5530D8191A6E569200CFEBE9 /* ProjectsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D8181A6E569200CFEBE9 /* ProjectsWindowController.m */; };
+		5530D81C1A6E57CF00CFEBE9 /* ProjectsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5530D81A1A6E57CF00CFEBE9 /* ProjectsWindow.xib */; };
+		5530D8221A6E666300CFEBE9 /* JSONTypechecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D8201A6E666300CFEBE9 /* JSONTypechecker.m */; };
+		5530D8271A6E6E6F00CFEBE9 /* ProjectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D8251A6E6E6F00CFEBE9 /* ProjectManager.m */; };
+		5530D8301A6E6FCD00CFEBE9 /* ViewerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D82F1A6E6FCD00CFEBE9 /* ViewerWindowController.m */; };
+		5530D8331A6E6FDA00CFEBE9 /* ViewerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5530D8311A6E6FDA00CFEBE9 /* ViewerWindow.xib */; };
+		555EAB411A6F34450042A4B6 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB401A6F34450042A4B6 /* Utils.m */; };
+		555EAB481A6F3E180042A4B6 /* LightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB471A6F3E180042A4B6 /* LightView.m */; };
+		555EAB4B1A6F415F0042A4B6 /* TaskRun.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB4A1A6F415F0042A4B6 /* TaskRun.m */; };
+		555EAB801A6F5C7E0042A4B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 555EAB7F1A6F5C7E0042A4B6 /* WebKit.framework */; };
+		555EAB881A7071B00042A4B6 /* OutputParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB871A7071B00042A4B6 /* OutputParser.m */; };
+		555EAB8B1A70A5740042A4B6 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 555EAB891A70A5740042A4B6 /* PreferencesWindow.xib */; };
+		555EAB8E1A70A9800042A4B6 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB8D1A70A9800042A4B6 /* PreferencesWindowController.m */; };
+		555EAB911A70A9AF0042A4B6 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB901A70A9AF0042A4B6 /* Preferences.m */; };
+		555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB931A70BA560042A4B6 /* FontPreviewField.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5530D7D11A6E52A600CFEBE9 /* Builder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Builder.app; path = "Build Spork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5530D7D51A6E52A600CFEBE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
+		5530D7F71A6E548700CFEBE9 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		5530D7F81A6E548700CFEBE9 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		5530D7F91A6E548700CFEBE9 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = SOURCE_ROOT; };
+		5530D8031A6E553B00CFEBE9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		5530D8071A6E554A00CFEBE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
+		5530D8141A6E568B00CFEBE9 /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Project.h; path = Source/Project.h; sourceTree = "<group>"; };
+		5530D8151A6E568B00CFEBE9 /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Project.m; path = Source/Project.m; sourceTree = "<group>"; };
+		5530D8171A6E569200CFEBE9 /* ProjectsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectsWindowController.h; path = Source/ProjectsWindowController.h; sourceTree = "<group>"; };
+		5530D8181A6E569200CFEBE9 /* ProjectsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectsWindowController.m; path = Source/ProjectsWindowController.m; sourceTree = "<group>"; };
+		5530D81B1A6E57CF00CFEBE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/ProjectsWindow.xib; sourceTree = SOURCE_ROOT; };
+		5530D8201A6E666300CFEBE9 /* JSONTypechecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONTypechecker.m; path = Source/JSONTypechecker.m; sourceTree = "<group>"; };
+		5530D8211A6E666300CFEBE9 /* JSONTypechecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONTypechecker.h; path = Source/JSONTypechecker.h; sourceTree = "<group>"; };
+		5530D8241A6E6E6F00CFEBE9 /* ProjectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectManager.h; path = Source/ProjectManager.h; sourceTree = "<group>"; };
+		5530D8251A6E6E6F00CFEBE9 /* ProjectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectManager.m; path = Source/ProjectManager.m; sourceTree = "<group>"; };
+		5530D82E1A6E6FCD00CFEBE9 /* ViewerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewerWindowController.h; path = Source/ViewerWindowController.h; sourceTree = "<group>"; };
+		5530D82F1A6E6FCD00CFEBE9 /* ViewerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewerWindowController.m; path = Source/ViewerWindowController.m; sourceTree = "<group>"; };
+		5530D8321A6E6FDA00CFEBE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/ViewerWindow.xib; sourceTree = SOURCE_ROOT; };
+		555EAB3F1A6F34450042A4B6 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = Source/Utils.h; sourceTree = "<group>"; };
+		555EAB401A6F34450042A4B6 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utils.m; path = Source/Utils.m; sourceTree = "<group>"; };
+		555EAB421A6F34690042A4B6 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = Source/Prefix.pch; sourceTree = SOURCE_ROOT; };
+		555EAB461A6F3E180042A4B6 /* LightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightView.h; path = Source/LightView.h; sourceTree = "<group>"; };
+		555EAB471A6F3E180042A4B6 /* LightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightView.m; path = Source/LightView.m; sourceTree = "<group>"; };
+		555EAB491A6F415F0042A4B6 /* TaskRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskRun.h; path = Source/TaskRun.h; sourceTree = "<group>"; };
+		555EAB4A1A6F415F0042A4B6 /* TaskRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskRun.m; path = Source/TaskRun.m; sourceTree = "<group>"; };
+		555EAB7F1A6F5C7E0042A4B6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		555EAB861A7071B00042A4B6 /* OutputParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutputParser.h; path = Source/OutputParser.h; sourceTree = "<group>"; };
+		555EAB871A7071B00042A4B6 /* OutputParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutputParser.m; path = Source/OutputParser.m; sourceTree = "<group>"; };
+		555EAB8A1A70A5740042A4B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Resources/Base.lproj/PreferencesWindow.xib; sourceTree = SOURCE_ROOT; };
+		555EAB8C1A70A9800042A4B6 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PreferencesWindowController.h; path = Source/PreferencesWindowController.h; sourceTree = "<group>"; };
+		555EAB8D1A70A9800042A4B6 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PreferencesWindowController.m; path = Source/PreferencesWindowController.m; sourceTree = "<group>"; };
+		555EAB8F1A70A9AF0042A4B6 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Preferences.h; path = Source/Preferences.h; sourceTree = "<group>"; };
+		555EAB901A70A9AF0042A4B6 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Preferences.m; path = Source/Preferences.m; sourceTree = "<group>"; };
+		555EAB921A70BA560042A4B6 /* FontPreviewField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FontPreviewField.h; path = Source/FontPreviewField.h; sourceTree = "<group>"; };
+		555EAB931A70BA560042A4B6 /* FontPreviewField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontPreviewField.m; path = Source/FontPreviewField.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5530D7CE1A6E52A600CFEBE9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				555EAB801A6F5C7E0042A4B6 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5530D7C81A6E52A600CFEBE9 = {
+			isa = PBXGroup;
+			children = (
+				5530D8091A6E564300CFEBE9 /* Model */,
+				555EAB431A6F3DF30042A4B6 /* View */,
+				5530D7FF1A6E549E00CFEBE9 /* View Controller */,
+				5530D7D31A6E52A600CFEBE9 /* Other */,
+				5530D7D41A6E52A600CFEBE9 /* Resources */,
+				555EAB811A6F5C8B0042A4B6 /* Frameworks */,
+				5530D7D21A6E52A600CFEBE9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5530D7D21A6E52A600CFEBE9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5530D7D11A6E52A600CFEBE9 /* Builder.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5530D7D31A6E52A600CFEBE9 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				555EAB421A6F34690042A4B6 /* Prefix.pch */,
+				5530D7F91A6E548700CFEBE9 /* main.m */,
+			);
+			name = Other;
+			path = "Build Spork";
+			sourceTree = "<group>";
+		};
+		5530D7D41A6E52A600CFEBE9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5530D8061A6E554A00CFEBE9 /* MainMenu.xib */,
+				5530D81A1A6E57CF00CFEBE9 /* ProjectsWindow.xib */,
+				555EAB891A70A5740042A4B6 /* PreferencesWindow.xib */,
+				5530D8311A6E6FDA00CFEBE9 /* ViewerWindow.xib */,
+				5530D8031A6E553B00CFEBE9 /* Images.xcassets */,
+				5530D7D51A6E52A600CFEBE9 /* Info.plist */,
+			);
+			name = Resources;
+			path = "Build Spork";
+			sourceTree = "<group>";
+		};
+		5530D7FF1A6E549E00CFEBE9 /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5530D7F71A6E548700CFEBE9 /* AppDelegate.h */,
+				5530D7F81A6E548700CFEBE9 /* AppDelegate.m */,
+				555EAB8C1A70A9800042A4B6 /* PreferencesWindowController.h */,
+				555EAB8D1A70A9800042A4B6 /* PreferencesWindowController.m */,
+				5530D8171A6E569200CFEBE9 /* ProjectsWindowController.h */,
+				5530D8181A6E569200CFEBE9 /* ProjectsWindowController.m */,
+				5530D82E1A6E6FCD00CFEBE9 /* ViewerWindowController.h */,
+				5530D82F1A6E6FCD00CFEBE9 /* ViewerWindowController.m */,
+			);
+			name = "View Controller";
+			sourceTree = "<group>";
+		};
+		5530D8091A6E564300CFEBE9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5530D8211A6E666300CFEBE9 /* JSONTypechecker.h */,
+				5530D8201A6E666300CFEBE9 /* JSONTypechecker.m */,
+				555EAB861A7071B00042A4B6 /* OutputParser.h */,
+				555EAB871A7071B00042A4B6 /* OutputParser.m */,
+				555EAB8F1A70A9AF0042A4B6 /* Preferences.h */,
+				555EAB901A70A9AF0042A4B6 /* Preferences.m */,
+				5530D8141A6E568B00CFEBE9 /* Project.h */,
+				5530D8151A6E568B00CFEBE9 /* Project.m */,
+				5530D8241A6E6E6F00CFEBE9 /* ProjectManager.h */,
+				5530D8251A6E6E6F00CFEBE9 /* ProjectManager.m */,
+				555EAB491A6F415F0042A4B6 /* TaskRun.h */,
+				555EAB4A1A6F415F0042A4B6 /* TaskRun.m */,
+				555EAB3F1A6F34450042A4B6 /* Utils.h */,
+				555EAB401A6F34450042A4B6 /* Utils.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		555EAB431A6F3DF30042A4B6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				555EAB461A6F3E180042A4B6 /* LightView.h */,
+				555EAB471A6F3E180042A4B6 /* LightView.m */,
+				555EAB921A70BA560042A4B6 /* FontPreviewField.h */,
+				555EAB931A70BA560042A4B6 /* FontPreviewField.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		555EAB811A6F5C8B0042A4B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				555EAB7F1A6F5C7E0042A4B6 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			path = "Build Spork";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5530D7D01A6E52A600CFEBE9 /* Build Spork */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5530D7EE1A6E52A700CFEBE9 /* Build configuration list for PBXNativeTarget "Build Spork" */;
+			buildPhases = (
+				5530D7CD1A6E52A600CFEBE9 /* Sources */,
+				5530D7CE1A6E52A600CFEBE9 /* Frameworks */,
+				5530D7CF1A6E52A600CFEBE9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Build Spork";
+			productName = "Build Spork";
+			productReference = 5530D7D11A6E52A600CFEBE9 /* Builder.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5530D7C91A6E52A600CFEBE9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Ricci Adams";
+				TargetAttributes = {
+					5530D7D01A6E52A600CFEBE9 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 5530D7CC1A6E52A600CFEBE9 /* Build configuration list for PBXProject "Build Spork" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5530D7C81A6E52A600CFEBE9;
+			productRefGroup = 5530D7D21A6E52A600CFEBE9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5530D7D01A6E52A600CFEBE9 /* Build Spork */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5530D7CF1A6E52A600CFEBE9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530D8051A6E553B00CFEBE9 /* Images.xcassets in Resources */,
+				555EAB8B1A70A5740042A4B6 /* PreferencesWindow.xib in Resources */,
+				5530D8331A6E6FDA00CFEBE9 /* ViewerWindow.xib in Resources */,
+				5530D81C1A6E57CF00CFEBE9 /* ProjectsWindow.xib in Resources */,
+				5530D8081A6E554A00CFEBE9 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5530D7CD1A6E52A600CFEBE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5530D7FD1A6E548800CFEBE9 /* main.m in Sources */,
+				5530D7FC1A6E548800CFEBE9 /* AppDelegate.m in Sources */,
+				5530D8301A6E6FCD00CFEBE9 /* ViewerWindowController.m in Sources */,
+				555EAB411A6F34450042A4B6 /* Utils.m in Sources */,
+				555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */,
+				5530D8161A6E568B00CFEBE9 /* Project.m in Sources */,
+				5530D8191A6E569200CFEBE9 /* ProjectsWindowController.m in Sources */,
+				555EAB481A6F3E180042A4B6 /* LightView.m in Sources */,
+				5530D8221A6E666300CFEBE9 /* JSONTypechecker.m in Sources */,
+				555EAB4B1A6F415F0042A4B6 /* TaskRun.m in Sources */,
+				555EAB881A7071B00042A4B6 /* OutputParser.m in Sources */,
+				555EAB8E1A70A9800042A4B6 /* PreferencesWindowController.m in Sources */,
+				555EAB911A70A9AF0042A4B6 /* Preferences.m in Sources */,
+				5530D8271A6E6E6F00CFEBE9 /* ProjectManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5530D8061A6E554A00CFEBE9 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5530D8071A6E554A00CFEBE9 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		5530D81A1A6E57CF00CFEBE9 /* ProjectsWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5530D81B1A6E57CF00CFEBE9 /* Base */,
+			);
+			name = ProjectsWindow.xib;
+			sourceTree = "<group>";
+		};
+		5530D8311A6E6FDA00CFEBE9 /* ViewerWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5530D8321A6E6FDA00CFEBE9 /* Base */,
+			);
+			name = ViewerWindow.xib;
+			sourceTree = "<group>";
+		};
+		555EAB891A70A5740042A4B6 /* PreferencesWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				555EAB8A1A70A5740042A4B6 /* Base */,
+			);
+			name = PreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5530D7EC1A6E52A700CFEBE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5530D7ED1A6E52A700CFEBE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/Prefix.pch;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5530D7EF1A6E52A700CFEBE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5530D7F01A6E52A700CFEBE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5530D7CC1A6E52A600CFEBE9 /* Build configuration list for PBXProject "Build Spork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5530D7EC1A6E52A700CFEBE9 /* Debug */,
+				5530D7ED1A6E52A700CFEBE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5530D7EE1A6E52A700CFEBE9 /* Build configuration list for PBXNativeTarget "Build Spork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5530D7EF1A6E52A700CFEBE9 /* Debug */,
+				5530D7F01A6E52A700CFEBE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5530D7C91A6E52A600CFEBE9 /* Project object */;
+}

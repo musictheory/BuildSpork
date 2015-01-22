@@ -1,0 +1,63 @@
+
+
+function log()
+{
+    console.log.apply(null, arguments);
+}
+
+function warn()
+{
+    console.warn.apply(null, arguments);
+}
+
+
+function wait(seconds, callback)
+{
+    var ms  = seconds * 1000;
+    var now = Date.now();
+    while (1) {
+        if ((Date.now() - now) > ms) break;
+    }
+}
+
+
+task("logs", function() {
+    log("Testing logs!");
+    for (var i = 0; i < 25; i++) {
+        log(i);
+        warn(i);
+        wait(0.25);
+    }
+});
+
+
+task("files", function() {
+    log("Testing files!");
+    log("Control.oj:25 fake issue on line 25");
+    log("Control.oj:35:3 with column");
+    log("Folder/File with Space.oj:1 fake issue on line 1");
+    log("Done");
+});
+
+
+task("moo", function() {
+    log("Moo!");
+});
+
+task("oink", function() {
+    log("Oink!");
+});
+
+task("lights", function() {
+    log("Testing lights!")       
+    log("[spork] light alpha #ff0000")
+    log("[spork] light beta  #ff0000")
+    log("[spork] light gamma #ff0000")
+    wait(0.5);                   
+    log("[spork] light alpha #00ff00")
+    wait(0.5);                   
+    log("[spork] light beta  #00ff00")
+    wait(0.5);                   
+    log("[spork] light gamma #00ff00")
+    log("Done!")                 
+});

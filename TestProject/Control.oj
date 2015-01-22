@@ -1,0 +1,138 @@
+
+
+@enum {
+    ControlEventTouchDown        = 0x00000001,
+    ControlEventTouchDownRepeat  = 0x00000002,
+
+    ControlEventTouchDragInside  = 0x00000004,
+    ControlEventTouchDragOutside = 0x00000008,
+    ControlEventTouchDragEnter   = 0x00000010,
+    ControlEventTouchDragExit    = 0x00000020,
+
+    ControlEventTouchUpInside    = 0x00000040,
+    ControlEventTouchUpOutside   = 0x00000080,
+    ControlEventTouchCancel      = 0x00000100,
+    ControlEventValueChanged     = 0x00001000,
+    ControlEventAllEvents        = 0xFFFFFFFF
+}
+
+
+(function() { "use strict";
+
+@class View;
+
+
+@implementation Control : View {
+    Array  _targetActions;
+}
+
+@property (getter=isEnabled) BOOL enabled;
+
++ (String) CSSClassName
+{
+    return "Control";
+}
+
+
+- (id) init
+{
+    if ((self = [super init])) {
+        _enabled = YES;
+    }
+
+    return self;
+}
+
+
+//#pragma mark -
+//#pragma mark Clickable
+
+- (void) addTarget:(id)target action:(SEL)action forControlEvents:(Number)eventMask
+{
+    if (!action || !eventMask) return;
+    var didAdd = false;
+
+    _.each(_targetActions, function(ta) {
+        if (ta.target == target && oj.sel_isEqual(action, ta.action)) {
+            ta.eventMask |= eventMask;
+            didAdd = true;
+        }
+    });
+
+    if (!didAdd) {
+        if (!_targetActions) _targetActions = [ ];
+        _targetActions.push({
+            target: target,
+            action: action,
+            eventMask: eventMask
+        })
+    }
+}
+
+
+- (void) removeTarget:(id)target action:(SEL)action forControlEvents:(Number)eventMask
+{
+    if (!_targetActions) return;
+
+    _targetActions = _.filter(_targetActions, function(ta) {
+        var targetEqual  = target == ta.target;
+        var actionEqual  = oj.sel_isEqual(action, ta.action);
+        var shouldRemove = false;
+
+        if ((!target      &&  actionEqual) ||
+            ( targetEqual && !action     ) ||
+            ( targetEqual &&  actionEqual))
+        {
+            ta.eventMask &= ~eventMask;
+            shouldRemove = !ta.eventMask;
+        }
+
+        return !shouldRemove;
+    });
+}
+
+
+- (Array) allTargets
+{
+    var result = [ ];
+
+    _.each(_targetActions, function(ta) {
+        result.push(ta.target);
+    })
+
+    return _.uniq(result);
+}
+
+
+- (Number) allControlEvents
+{
+    var result = 0;
+
+    _.each(_targetActions, function(ta) {
+        result |= ta.eventMask;
+    })
+
+    return result;
+}
+
+
+- (void) _sendActionsForEvents:(Number)eventMask withEvent:(Event)event
+{
+    _.each(_targetActions, function(ta) {
+        if (ta.eventMask & eventMask) {
+            [ta.target performSelector:ta.action withObject:self withObject:event];
+        }
+    });
+}
+
+
+- (void) sendActionsForControlEvents:(Number)eventMask
+{
+    [self _sendActionsForEvents:eventMask withEvent:nil];
+}
+
+
+@end
+
+
+}());

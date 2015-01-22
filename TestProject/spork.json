@@ -1,0 +1,25 @@
+{
+    "name": "Test Spork",
+
+    "env": {
+        "PATH": "/usr/local/bin:/usr/bin:/bin"
+    },
+
+    "targets": [
+        { "title": "Logs",   "command": "jake logs"   },
+        { "title": "Files",  "command": "jake files"  },
+        { "title": "Lights", "command": "jake lights" }
+    ],
+
+    "actions": [
+        { "title": "Moo",   "command": "jake moo"  },
+        { "title": "Oink",  "command": "jake oink" }
+    ],
+
+    "lights": [
+        { "name": "alpha",  "title": "a", "tooltip": "The Alpha Light!" },
+        { "name": "beta",   "title": "b", "tooltip": "The Beta Light!"  },
+        { "name": "gamma",  "title": "c", "tooltip": "The Gamma Light!" }
+    ]
+}
+ 

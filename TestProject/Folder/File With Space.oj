@@ -1,0 +1,253 @@
+
+(function() { "use strict";
+
+@class NavigationController, View;
+
+
+@implementation ViewController {
+    BOOL _isLoadingState;
+    View _view;
+}
+
+@property (readonly) ViewController parentViewController;
+@property (readonly) Array childViewControllers;
+@property (readonly) View view;
+@property String title;
+
++ (String) CSSClassName
+{
+    return "ViewController";
+}
+
+
+- (id) init
+{
+    if ((self = [super init])) {
+        _childViewControllers = [ ];
+    }
+
+    return self;
+}
+
+
+- (View) view
+{
+    if (!_view) {
+        _view = [[View alloc] init];
+
+        var $element = $([_view outerElement]);
+
+        var cls = [self class];
+        while (cls) {
+            if ([cls respondsToSelector:@selector(CSSClassName)]) {
+                $element.addClass([cls CSSClassName]);
+            }
+
+            cls = [cls superclass];
+        }
+
+        [self viewDidLoad];
+    }
+
+    return _view;
+}
+
+
+- (BOOL) isViewLoaded
+{
+    return !!_view;
+}
+
+
+- (void) _viewWillAppear:(BOOL)animated
+{
+    [self viewWillAppear:animated];
+
+    _.each(_childViewControllers, function(vc) {
+        [vc _viewWillAppear:animated];
+    });
+}
+
+
+- (void) _viewDidAppear:(BOOL)animated
+{
+    [self viewDidAppear:animated];
+
+    _.each(_childViewControllers, function(vc) {
+        [vc _viewDidAppear:animated];
+    });
+}
+
+
+- (void) _viewWillDisappear:(BOOL)animated
+{
+    [self viewWillDisappear:animated];
+
+    _.each(_childViewControllers, function(vc) {
+        [vc _viewWillDisappear:animated];
+    });
+}
+
+
+- (void) _viewDidDisappear:(BOOL)animated
+{
+    [self viewDidDisappear:animated];
+
+    _.each(_childViewControllers, function(vc) {
+        [vc _viewDidDisappear:animated];
+    });
+}
+
+
+- (void) viewWillAppear:(BOOL)animated    { }
+- (void) viewDidAppear:(BOOL)animated     { }
+- (void) viewWillDisappear:(BOOL)animated { }
+- (void) viewDidDisappear:(BOOL)animated  { }
+
+
+- (NavigationController) navigationController
+{
+    var parent = [self parentViewController];
+    var navigationController = nil;
+
+    while (parent) {
+        if ([parent isKindOfClass:[NavigationController class]]) {
+            navigationController = parent;
+            break;
+        }
+
+        parent = [parent parentViewController];
+    }
+
+    return navigationController;
+}
+
+
+- (void) addChildViewController:(ViewController)childController
+{
+    if (!_childViewControllers) _childViewControllers = [ ];
+
+    [childController willMoveToParentViewController:self];
+
+    _childViewControllers.push(childController);
+    [childController _setParentViewController:self];
+}
+
+
+- (void) removeChildViewController:(ViewController)childController
+{
+    if ([childController parentViewController] == self) {
+        [childController _setParentViewController:nil];
+    }
+
+    [childController didMoveToParentViewController:nil];
+
+    _childViewControllers = _.without(_childViewControllers, childController);
+}
+
+
+- (void) _setParentViewController:(ViewController)parentViewController
+{
+    _parentViewController = parentViewController;
+}
+
+
+- (void) removeFromParentViewController
+{
+    [_parentViewController removeChildViewController:self];
+}
+
+
+- (void) willMoveToParentViewController:(ViewController)parent { }
+- (void) didMoveToParentViewController:(ViewController)parent  { }
+
+
+- (void) viewDidLoad
+{
+    [self setupViews];
+
+    var stateKey = [self stateKey];
+    if (!stateKey) return;
+
+    var usesSession = [self usesSessionState];
+    var sessionJSON, sessionObject;
+    var localJSON,   localObject;
+
+    if (usesSession) {
+        try {
+            if (window.sessionStorage) {
+                sessionJSON = window.sessionStorage.getItem(stateKey);
+
+                if (_.isString(sessionJSON)) {
+                    sessionObject = JSON.parse(sessionJSON);
+                }
+            }
+        } catch (e) { }
+
+        if (!sessionObject) {
+            sessionObject = { };
+        }
+    }
+
+    if (store.enabled) {
+        localJSON = store.get(stateKey);
+
+        if (_.isString(localJSON)) {
+            localObject = JSON.parse(localJSON);
+        }
+    }
+
+    if (!localObject) {
+        localObject = { };
+    }
+
+    var wasLoadingState = _isLoadingState;
+    _isLoadingState = true;
+    if (sessionObject) [self loadSessionStateFromObject:sessionObject];
+    if (localObject)   [self loadStateFromObject:localObject];
+    _isLoadingState = wasLoadingState;
+}
+
+
+- (void) saveState
+{
+    if (_isLoadingState) return;
+
+    var stateKey = [self stateKey];
+    if (!stateKey) return;
+
+    var usesSession = [self usesSessionState];
+
+    try {
+        if (usesSession && window.sessionStorage) {
+            var sessionObject = { };
+            [self saveSessionStateToObject:sessionObject];
+            window.sessionStorage.setItem(stateKey, JSON.stringify(sessionObject));
+        }
+    } catch (e) { }
+
+    if (store.enabled) {
+        try {
+            var localObject = { };
+            [self saveStateToObject:localObject];
+            store.set(stateKey, JSON.stringify(localObject));
+        } catch (e) { }
+    }
+}
+
+
+- (String) stateKey { return nil; }
+- (BOOL) usesSessionState { return NO; }
+
+- (void) setupViews { }
+- (void) saveStateToObject:(Object)object { }
+- (void) loadStateFromObject:(Object)object { }
+
+- (void) saveSessionStateToObject:(Object)object { }
+- (void) loadSessionStateFromObject:(Object)object { }
+
+@end
+
+
+}());
+
