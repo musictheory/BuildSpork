@@ -6,7 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ViewerWindowController">
             <connections>
-                <outlet property="textView" destination="HKe-I8-OQJ" id="bKl-68-pvb"/>
+                <outlet property="logView" destination="ANu-pO-oYP" id="Bcz-cR-gEI"/>
                 <outlet property="toolbar" destination="oOo-Lu-SqB" id="L9Z-cw-Z4Y"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="7AJ-Tb-ohf"/>
             </connections>
@@ -22,38 +22,10 @@
                 <rect key="frame" x="0.0" y="1" width="480" height="320"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2sr-aa-6vo">
-                        <rect key="frame" x="-1" y="-1" width="482" height="322"/>
+                    <customView id="ANu-pO-oYP" customClass="LogView">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="HKr-05-98C">
-                            <rect key="frame" x="1" y="1" width="223" height="133"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="HKe-I8-OQJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="223" height="320"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="480" height="320"/>
-                                    <size key="maxSize" width="482" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="480" height="320"/>
-                                    <size key="maxSize" width="482" height="10000000"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="-2" id="va1-Kh-9VP"/>
-                                    </connections>
-                                </textView>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="wVX-zo-Daz">
-                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="PT9-QP-vN8">
-                            <rect key="frame" x="224" y="1" width="15" height="133"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
+                    </customView>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="2327EAD0-D33F-42A0-B164-5BDD9F67D884" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconAndLabel" sizeMode="regular" id="oOo-Lu-SqB">

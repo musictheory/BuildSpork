@@ -23,20 +23,19 @@
 
 #import "AppDelegate.h"
 #import "LightView.h"
+#import "LogView.h"
 #import "Project.h"
 #import "ProjectManager.h"
 #import "OutputParser.h"
 #import "TaskRun.h"
 #import "Preferences.h"
 
-@import WebKit;
-
 static NSInteger ShowProjectsTag = -1000;
 static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 @interface ViewerWindowController () <NSToolbarDelegate, TaskRunDelegate>
 @property (weak)   IBOutlet NSToolbar  *toolbar;
-@property (strong) IBOutlet NSTextView *textView;
+@property (strong) IBOutlet LogView *logView;
 @end
 
 
@@ -103,22 +102,19 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 - (void) _rebuildTextView
 {
-    NSColor *backgroundColor = [[Preferences sharedInstance] backgroundColor];
+    Preferences *preferences = [Preferences sharedInstance];
+    NSColor *backgroundColor = [preferences backgroundColor];
 
-    [[self textView] setBackgroundColor:backgroundColor];
+    LogView *logView = [self logView];
+    [logView setBackgroundColor:backgroundColor];
+    [logView setForegroundColor:[preferences foregroundColor]];
+    [logView setErrorColor:[preferences errorColor]];
+    [logView setLinkColor:[preferences linkColor]];
     
     if (IsDarkColor(backgroundColor)) {
         [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
     } else {
         [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
-    }
-
-    NSArray *outputLines = _outputLines;
-    _urlToIssueMap = [NSMutableDictionary dictionary];
-    _outputLines   = [NSMutableArray array];
-
-    for (OutputParserLine *line in outputLines) {
-        [self _appendOutputLine:line];
     }
 }
 
@@ -382,6 +378,54 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 }
 
 
+- (void) _appendOutputLine:(OutputParserLine *)line
+{
+    OutputParserLineType type = [line type];
+
+    void (^appendError)(NSString *, NSString *) = ^(NSString *prefix, NSString *content) {
+        [_logView appendMessage:[line string] type:LogViewMessageTypeInternal];
+    };
+    
+    if (type == OutputParserLineTypeReset) {
+        [_logView reset];
+
+    } else if (type == OutputParserLineTypeMark) {
+        [_logView appendMark];
+
+    } else if (type == OutputParserLineTypeFileIssue) {
+        OutputParserIssueLine *issueLine = (OutputParserIssueLine *)line;
+        
+        if ([_selectedProject URLWithFilePath:[issueLine path]]) {
+            [_logView appendIssueWithPath:[issueLine path] lineNumber:[issueLine lineNumber] issueString:[issueLine issueString]];
+
+        } else {
+            [_logView appendMessage:[issueLine string] type:LogViewMessageTypeDefault];
+        }
+    
+    } else if (type == OutputParserLineTypeLight) {
+        OutputParserLightLine *lightLine = (OutputParserLightLine *)line;
+      
+        NSColor   *lightColor = [lightLine color];
+        NSString  *lightName  = [lightLine lightName];
+        LightView *lightView  = [_nameToLightViewMap objectForKey:lightName];
+    
+        if (lightView) {
+            [lightView setColor:lightColor];
+        } else {
+            appendError(NSLocalizedString(@"Unknown light: ", nil), [line string]);
+        }
+    
+    } else if (type == OutputParserLineTypeParseError) {
+        appendError(NSLocalizedString(@"Parse error: ", nil), [line string]);
+    
+    } else if (type == OutputParserLineTypeMessage) {
+        [_logView appendMessage:[line string] type:LogViewMessageTypeDefault];
+
+    } else if (type == OutputParserLineTypeError) {
+        [_logView appendMessage:[line string] type:LogViewMessageTypeError];
+    }
+}
+
 
 #pragma mark - Actions
 
@@ -426,120 +470,6 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     }
 
 }
-
-
-#pragma mark - Output
-
-- (void) _appendMark
-{
-
-}
-
-
-- (void) _appendLink:(NSURL *)link file:(NSString *)file lineNumber:(NSInteger)lineNumber columnNumber:(NSInteger)columnNumber issueString:(NSString *)issueString
-{
-    NSString *linkText = [NSString stringWithFormat:@"%@:%ld", file, (long)lineNumber];
-
-    NSMutableAttributedString *as = [[NSMutableAttributedString alloc] init];
-    
-    [as appendAttributedString:[[NSAttributedString alloc] initWithString:linkText attributes:@{
-        NSForegroundColorAttributeName: [NSColor blueColor],
-        NSLinkAttributeName: link,
-        NSUnderlineColorAttributeName: [NSColor clearColor]
-    }]];
-
-    issueString = [NSString stringWithFormat:@" %@\n", issueString];
-
-    [as appendAttributedString:[[NSAttributedString alloc] initWithString:issueString attributes:@{
-        NSForegroundColorAttributeName: [NSColor blackColor],
-    }]];
-
-    NSTextView    *textView    = [self textView];
-    NSTextStorage *textStorage = [textView textStorage];
-
-    [textStorage appendAttributedString:as];
-    [textView scrollRangeToVisible:NSMakeRange([[textView string] length], 0)];
-}
-
-
-- (void) _appendString:(NSString *)line color:(NSColor *)color
-{
-    line = [line stringByAppendingString:@"\n"];
-
-    NSAttributedString *as = [[NSAttributedString alloc] initWithString:line attributes:@{
-        NSForegroundColorAttributeName: color
-    }];
-    
-    NSTextView    *textView    = [self textView];
-    NSTextStorage *textStorage = [textView textStorage];
-
-    [textStorage appendAttributedString:as];
-    [textView scrollRangeToVisible:NSMakeRange([[textView string] length], 0)];
-}
-
-
-- (void) _appendOutputLine:(OutputParserLine *)line
-{
-    OutputParserLineType type = [line type];
-
-    void (^appendError)(NSString *, NSString *) = ^(NSString *prefix, NSString *content) {
-        NSColor *color = [[[Preferences sharedInstance] foregroundColor] colorWithAlphaComponent:0.5];
-        [self _appendString:[prefix stringByAppendingString:content] color:color];
-    };
-    
-    if (type == OutputParserLineTypeReset) {
-        [[self textView] setString:@""];
-
-    } else if (type == OutputParserLineTypeMark) {
-        [self _appendMark];
-
-    } else if (type == OutputParserLineTypeFileIssue) {
-        OutputParserIssueLine *issueLine = (OutputParserIssueLine *)line;
-        
-        NSURL *fileURL = [_selectedProject URLWithFilePath:[issueLine path]];
-        
-        if (fileURL) {
-            NSInteger count   = [_urlToIssueMap count];
-            NSURL    *linkURL = [NSURL URLWithString:[NSString stringWithFormat:@"issue://%ld", (long)count]];
-            
-            [_urlToIssueMap setObject:line forKey:linkURL];
-            
-            [self _appendLink: linkURL
-                         file: [fileURL lastPathComponent]
-                   lineNumber: [issueLine lineNumber]
-                 columnNumber: [issueLine columnNumber]
-                  issueString: [issueLine issueString]];
-
-        } else {
-            [self _appendString:[line string] color:[[Preferences sharedInstance] foregroundColor]];
-        }
-    
-    } else if (type == OutputParserLineTypeLight) {
-        OutputParserLightLine *lightLine = (OutputParserLightLine *)line;
-      
-        NSColor   *lightColor = [lightLine color];
-        NSString  *lightName  = [lightLine lightName];
-        LightView *lightView  = [_nameToLightViewMap objectForKey:lightName];
-    
-        if (lightView) {
-            [lightView setColor:lightColor];
-        } else {
-            appendError(NSLocalizedString(@"Unknown light: ", nil), [line string]);
-        }
-    
-    } else if (type == OutputParserLineTypeParseError) {
-        appendError(NSLocalizedString(@"Parse error: ", nil), [line string]);
-    
-    } else if (type == OutputParserLineTypeMessage) {
-        [self _appendString:[line string] color:[[Preferences sharedInstance] foregroundColor]];
-
-    } else if (type == OutputParserLineTypeError) {
-        [self _appendString:[line string] color:[[Preferences sharedInstance] errorColor]];
-    }
-    
-    [_outputLines addObject:line];
-}
-
 
 
 #pragma mark - Notifications
@@ -600,10 +530,7 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     _outputLines   = [NSMutableArray array];
     _urlToIssueMap = [NSMutableDictionary dictionary];
     
-    OutputParserLine *reset = [[OutputParserLine alloc] init];
-    [reset setType:OutputParserLineTypeReset];
-    
-    [self _appendOutputLine:reset];
+    [_logView reset];
 }
 
 
@@ -630,18 +557,12 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 }
 
 
+#pragma mark - Log View Delegate
 
-#pragma mark - Text View Delegate
-
-- (BOOL) textView:(NSTextView *)textView clickedOnLink:(id)link atIndex:(NSUInteger)charIndex
+- (void) logView:(LogView *)logView clickedOnFileURL:(NSURL *)fileURL line:(NSInteger)lineNumber
 {
-    OutputParserIssueLine *issue = [_urlToIssueMap objectForKey:link];
-    
-    NSLog(@"%@ %ld", [issue path], (long) [issue lineNumber]);
-    
-    return YES;
+    NSLog(@"%@:%ld", fileURL, (long)lineNumber);
 }
-
 
 
 @end

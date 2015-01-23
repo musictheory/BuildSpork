@@ -27,6 +27,7 @@
 		555EAB8E1A70A9800042A4B6 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB8D1A70A9800042A4B6 /* PreferencesWindowController.m */; };
 		555EAB911A70A9AF0042A4B6 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB901A70A9AF0042A4B6 /* Preferences.m */; };
 		555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB931A70BA560042A4B6 /* FontPreviewField.m */; };
+		555EAB9A1A71CE8A0042A4B6 /* LogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB991A71CE8A0042A4B6 /* LogView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,8 @@
 		555EAB901A70A9AF0042A4B6 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Preferences.m; path = Source/Preferences.m; sourceTree = "<group>"; };
 		555EAB921A70BA560042A4B6 /* FontPreviewField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FontPreviewField.h; path = Source/FontPreviewField.h; sourceTree = "<group>"; };
 		555EAB931A70BA560042A4B6 /* FontPreviewField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontPreviewField.m; path = Source/FontPreviewField.m; sourceTree = "<group>"; };
+		555EAB981A71CE8A0042A4B6 /* LogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogView.h; path = Source/LogView.h; sourceTree = "<group>"; };
+		555EAB991A71CE8A0042A4B6 /* LogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogView.m; path = Source/LogView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +171,8 @@
 				555EAB471A6F3E180042A4B6 /* LightView.m */,
 				555EAB921A70BA560042A4B6 /* FontPreviewField.h */,
 				555EAB931A70BA560042A4B6 /* FontPreviewField.m */,
+				555EAB981A71CE8A0042A4B6 /* LogView.h */,
+				555EAB991A71CE8A0042A4B6 /* LogView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 				5530D8221A6E666300CFEBE9 /* JSONTypechecker.m in Sources */,
 				555EAB4B1A6F415F0042A4B6 /* TaskRun.m in Sources */,
 				555EAB881A7071B00042A4B6 /* OutputParser.m in Sources */,
+				555EAB9A1A71CE8A0042A4B6 /* LogView.m in Sources */,
 				555EAB8E1A70A9800042A4B6 /* PreferencesWindowController.m in Sources */,
 				555EAB911A70A9AF0042A4B6 /* Preferences.m in Sources */,
 				5530D8271A6E6E6F00CFEBE9 /* ProjectManager.m in Sources */,
