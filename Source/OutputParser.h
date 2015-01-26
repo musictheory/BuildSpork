@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2015, Ricci Adams
+    Copyright (c) 2015, musictheory.net, LLC
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following condition is met:
@@ -21,39 +21,9 @@
 
 @import AppKit;
 
-
-typedef NS_ENUM(NSInteger, OutputParserLineType) {
-    OutputParserLineTypeReset,
-    OutputParserLineTypeMark,
-    OutputParserLineTypeMessage,
-    OutputParserLineTypeError,
-    OutputParserLineTypeParseError,
-    OutputParserLineTypeLight,     // class = OutputParserLightLine
-    OutputParserLineTypeFileIssue  // class = OutputParserFileIssueLine
-};
-
-@class OutputParserLine;
+@class Event, Project;
 
 @interface OutputParser : NSObject
-- (OutputParserLine *) lineForLineData:(NSData *)data;
+- (Event *) eventForLineData:(NSData *)data project:(Project *)project fromStandardError:(BOOL)fromStandardError;
 @end
 
-
-@interface OutputParserLine : NSObject
-@property OutputParserLineType type;
-@property NSString *string;
-@end
-
-
-@interface OutputParserLightLine : OutputParserLine
-@property (readonly) NSString *lightName;
-@property (readonly) NSColor  *color;
-@end
-
-
-@interface OutputParserIssueLine : OutputParserLine
-@property (readonly) NSString  *path;
-@property (readonly) NSInteger  lineNumber;
-@property (readonly) NSInteger  columnNumber;   // May be NSNotFound
-@property (readonly) NSString  *issueString;
-@end

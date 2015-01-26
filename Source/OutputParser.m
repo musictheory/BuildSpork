@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2015, Ricci Adams
+    Copyright (c) 2015, musictheory.net, LLC
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following condition is met:
@@ -20,19 +20,8 @@
 */
 
 #import "OutputParser.h"
-
-@interface OutputParserLightLine ()
-@property NSString *lightName;
-@property NSColor  *color;
-@end
-
-
-@interface OutputParserIssueLine ()
-@property NSString  *path;
-@property NSInteger  lineNumber;
-@property NSInteger  columnNumber;   // May be NSNotFound
-@property NSString  *issueString;
-@end
+#import "Event.h"
+#import "Project.h"
 
 
 @implementation OutputParser {
@@ -40,119 +29,21 @@
 }
 
 
-static BOOL sMatch(NSRegularExpression *re, NSString *string, void (^callback)(NSArray *))
-{
-    NSTextCheckingResult *result = [re firstMatchInString:string options:0 range:NSMakeRange(0, [string length])];
-    BOOL didFind = NO;
-
-    NSInteger numberOfRanges = [result numberOfRanges];
-    if ([result numberOfRanges] > 1) {
-        NSMutableArray *captureGroups = [NSMutableArray array];
-        
-        NSInteger i;
-        for (i = 1; i < numberOfRanges; i++) {
-            NSRange captureRange = [result rangeAtIndex:i];
-            
-            if (captureRange.location != NSNotFound) {
-                [captureGroups addObject:[string substringWithRange:captureRange]];
-            } else {
-                [captureGroups addObject:@""];
-            }
-        }
-        
-        callback(captureGroups);
-        
-        didFind = YES;
-    }
-    
-    return didFind;
-}
-
-
-static NSColor *sGetColorFromParsedString(NSString *stringToParse)
-{
-    if (!stringToParse) return nil;
-
-    __block NSColor *color = nil;
-
-    float (^scanHex)(NSString *, float) = ^(NSString *string, float maxValue) {
-        const char *s = [string UTF8String];
-        float result = s ? (strtol(s, NULL, 16) / maxValue) : 0.0;
-        return result;
-    };
-
-    void (^withPattern)(NSString *, void(^)(NSArray *)) = ^(NSString *pattern, void (^callback)(NSArray *result)) {
-        if (color) return;
-
-        NSRegularExpression  *re = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:NULL];
-        sMatch(re, stringToParse, callback);
-    };
-
-    withPattern(@"#([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})", ^(NSArray *result) {
-        if ([result count] == 3) {
-            color = [NSColor colorWithRed: scanHex([result objectAtIndex:0], 65535.0)
-                                    green: scanHex([result objectAtIndex:1], 65535.0)
-                                     blue: scanHex([result objectAtIndex:2], 65535.0)
-                                    alpha: 1.0];
-        }
-    });
-    
-    withPattern(@"#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})", ^(NSArray *result) {
-        if ([result count] == 3) {
-            color = [NSColor colorWithRed: scanHex([result objectAtIndex:0], 255.0)
-                                    green: scanHex([result objectAtIndex:1], 255.0)
-                                     blue: scanHex([result objectAtIndex:2], 255.0)
-                                    alpha: 1.0];
-        }
-    });
-
-    withPattern(@"rgb\\s*\\(\\s*([0-9.]+)\\s*,\\s*([0-9.]+)\\s*,\\s*([0-9.]+)\\s*\\)", ^(NSArray *result) {
-        if ([result count] == 3) {
-            color = [NSColor colorWithRed: ([[result objectAtIndex:0] floatValue] / 255.0)
-                                    green: ([[result objectAtIndex:1] floatValue] / 255.0)
-                                     blue: ([[result objectAtIndex:2] floatValue] / 255.0)
-                                    alpha: 1.0];
-        }
-    });
-
-    withPattern(@"rgba\\s*\\(\\s*([0-9.]+)\\s*,\\s*([0-9.]+)\\s*,\\s*([0-9.]+)\\s*,\\s*([0-9.]+)\\s*\\)", ^(NSArray *result) {
-        if ([result count] == 4) {
-            color = [NSColor colorWithRed: ([[result objectAtIndex:0] floatValue] / 255.0)
-                                    green: ([[result objectAtIndex:1] floatValue] / 255.0)
-                                     blue: ([[result objectAtIndex:2] floatValue] / 255.0)
-                                    alpha:  [[result objectAtIndex:3] floatValue]];
-        }
-    });
-
-    withPattern(@"([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})", ^(NSArray *result) {
-        if ([result count] == 3) {
-            color = [NSColor colorWithRed: scanHex([result objectAtIndex:0], 255.0)
-                                    green: scanHex([result objectAtIndex:1], 255.0)
-                                     blue: scanHex([result objectAtIndex:2], 255.0)
-                                    alpha: 1.0];
-        }
-    });
-
-    return color;
-}
-
-
-
-- (OutputParserLine *) lineForLineData:(NSData *)data
+- (Event *) eventForLineData:(NSData *)data project:(Project *)project fromStandardError:(BOOL)fromStandardError
 {
     const char *bytes  = [data bytes];
     NSInteger   length = [data length];
     
     NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    __block Class                cls          = [OutputParserLine class];
-    __block OutputParserLineType type         = OutputParserLineTypeMessage;
-    __block NSColor             *lightColor   = nil;
-    __block NSString            *lightName    = nil;
-    __block NSString            *path         = nil;
-    __block NSInteger            lineNumber   = NSNotFound;
-    __block NSInteger            columnNumber = NSNotFound;
-    __block NSString            *issueString  = nil;
+    __block Class      cls          = [Event class];
+    __block NSString  *type         = EventTypeMessage;
+    __block NSString  *lightColor   = nil;
+    __block NSString  *lightName    = nil;
+    __block NSString  *path         = nil;
+    __block NSInteger  lineNumber   = NSNotFound;
+    __block NSInteger  columnNumber = NSNotFound;
+    __block NSString  *issueString  = nil;
 
     size_t sporkSize = strlen("[spork]");
 
@@ -168,26 +59,39 @@ static NSColor *sGetColorFromParsedString(NSString *stringToParse)
         
         NSInteger count   = [words count];
         NSString *command = count > 1 ? [words objectAtIndex:1] : nil;
-        
-        if ([command isEqualToString:@"reset"]) {
-            type = OutputParserLineTypeReset;
-        
+
+        if ([command isEqualToString:@"init"]) {
+            type = EventTypeInit;
+
+        } else if ([command isEqualToString:@"start"]) {
+            type = EventTypeStart;
+
+        } else if ([command isEqualToString:@"stop"]) {
+            type = EventTypeStop;
+
+        } else if ([command isEqualToString:@"reset"]) {
+            type = EventTypeReset;
+
         } else if ([command isEqualToString:@"mark"]) {
-            type = OutputParserLineTypeMark;
+            type = EventTypeMark;
         
         } else if ([command isEqualToString:@"light"]) {
-            cls  = [OutputParserLightLine class];
-            type = OutputParserLineTypeLight;
+            cls  = [LightEvent class];
+            type = EventTypeLight;
 
             lightName  = count > 2 ? [words objectAtIndex:2] : nil;
-            lightColor = sGetColorFromParsedString(string);
+            lightColor = nil;
+            
+            if (count > 3) {
+                lightColor = [[words subarrayWithRange:NSMakeRange(3, count - 3)] componentsJoinedByString:@" "];
+            }
             
             if (!lightName || !lightColor) {
-                type = OutputParserLineTypeParseError;
+                type = EventTypeInternal;
             }
 
         } else {
-            type = OutputParserLineTypeParseError;
+            type = EventTypeInternal;
         }
 
     // Check for file issue
@@ -196,10 +100,16 @@ static NSColor *sGetColorFromParsedString(NSString *stringToParse)
             _issueRegularExpression =  [NSRegularExpression regularExpressionWithPattern:@"(.*?):([0-9]+)(:[0-9]+)?\\s+(.*?)$" options:NSRegularExpressionCaseInsensitive error:NULL];
         }
         
-        sMatch(_issueRegularExpression, string, ^(NSArray *matches) {
+        MatchRegularExpression(_issueRegularExpression, string, ^(NSArray *matches) {
             if ([matches count] == 4) {
-                cls  = [OutputParserIssueLine class];
-                type = OutputParserLineTypeFileIssue;
+                path = [matches objectAtIndex:0];
+
+                if (![project URLWithFilePath:path]) {
+                    return;
+                }
+
+                cls  = [IssueEvent class];
+                type = EventTypeIssue;
 
                 path = [matches objectAtIndex:0];
                 lineNumber = [[matches objectAtIndex:1] integerValue];
@@ -212,41 +122,29 @@ static NSColor *sGetColorFromParsedString(NSString *stringToParse)
         });
     }
 
-    OutputParserLine *line = [[cls alloc] init];
+    Event *event = [[cls alloc] init];
     
-    [line setType:type];
-    [line setString:string];
-    
-    if (type == OutputParserLineTypeLight) {
-        OutputParserLightLine *lightLine = (OutputParserLightLine *)line;
-    
-        [lightLine setColor:lightColor];
-        [lightLine setLightName:lightName];
+    [event setType:type];
+    [event setString:string];
+    [event setLocation:(fromStandardError ? EventLocationErrorStream : EventLocationOutputStream)];
 
-    } else if (type == OutputParserLineTypeFileIssue) {
-        OutputParserIssueLine *issueLine = (OutputParserIssueLine *)line;
+    if ([event isKindOfClass:[LightEvent class]]) {
+        LightEvent *lightEvent = (LightEvent *)event;
+    
+        [lightEvent setColorString:lightColor];
+        [lightEvent setLightName:lightName];
+
+    } else if ([event isKindOfClass:[IssueEvent class]]) {
+        IssueEvent *issueEvent = (IssueEvent *)event;
         
-        [issueLine setPath:path];
-        [issueLine setLineNumber:lineNumber];
-        [issueLine setColumnNumber:columnNumber];
-        [issueLine setIssueString:issueString];
+        [issueEvent setPath:path];
+        [issueEvent setLineNumber:lineNumber];
+        [issueEvent setColumnNumber:columnNumber];
+        [issueEvent setIssueString:issueString];
     }
     
-    return line;
+    return event;
 }
 
 
 @end
-
-
-@implementation OutputParserLine
-@end
-
-
-@implementation OutputParserLightLine
-@end
-
-
-@implementation OutputParserIssueLine
-@end
-

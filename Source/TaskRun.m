@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2015, Ricci Adams
+    Copyright (c) 2015, musictheory.net, LLC
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following condition is met:
@@ -98,6 +98,8 @@
         NSString *replacement = [[_project environment] objectForKey:key];
         [environment setObject:replacement forKey:key];
     }
+    
+    [environment setObject:@"1" forKey:@"net.musictheory.spork"];
 
     [_task setEnvironment:environment];
 

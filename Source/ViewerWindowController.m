@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2015, Ricci Adams
+    Copyright (c) 2015, musictheory.net, LLC
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following condition is met:
@@ -22,6 +22,7 @@
 #import "ViewerWindowController.h"
 
 #import "AppDelegate.h"
+#import "Event.h"
 #import "LightView.h"
 #import "LogView.h"
 #import "Project.h"
@@ -33,7 +34,7 @@
 static NSInteger ShowProjectsTag = -1000;
 static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
-@interface ViewerWindowController () <NSToolbarDelegate, TaskRunDelegate>
+@interface ViewerWindowController () <NSToolbarDelegate, TaskRunDelegate, LogViewDelegate>
 @property (weak)   IBOutlet NSToolbar  *toolbar;
 @property (strong) IBOutlet LogView *logView;
 @end
@@ -57,8 +58,8 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     TaskRun      *_currentRun;
     OutputParser *_outputParser;
     
-    NSMutableArray      *_outputLines;
-    NSMutableDictionary *_urlToIssueMap;
+    BOOL _receivedInit;
+    BOOL _shouldSendStop;
 }
 
 
@@ -87,8 +88,12 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         _selectedProject = [[ProjectManager sharedInstance] projectWithUUID:UUID];
     }
     
+    [[self logView] setDelegate:self];
+    
     [self _updateProjectsItem];
-    [self _rebuildTextView];
+    [self _updateColors];
+    
+    [self _selectProject:_selectedProject];
 }
 
 
@@ -100,22 +105,18 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 #pragma mark - Private Methods
 
-- (void) _rebuildTextView
+- (void) _updateColors
 {
     Preferences *preferences = [Preferences sharedInstance];
     NSColor *backgroundColor = [preferences backgroundColor];
-
-    LogView *logView = [self logView];
-    [logView setBackgroundColor:backgroundColor];
-    [logView setForegroundColor:[preferences foregroundColor]];
-    [logView setErrorColor:[preferences errorColor]];
-    [logView setLinkColor:[preferences linkColor]];
     
     if (IsDarkColor(backgroundColor)) {
         [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
     } else {
         [[self window] setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
     }
+
+    [[[self window] contentView] setBackgroundColor:backgroundColor];
 }
 
 
@@ -378,52 +379,56 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 }
 
 
-- (void) _appendOutputLine:(OutputParserLine *)line
+- (void) _dispatchEvent:(Event *)event
 {
-    OutputParserLineType type = [line type];
+    NSString *type = [event type];
 
-    void (^appendError)(NSString *, NSString *) = ^(NSString *prefix, NSString *content) {
-        [_logView appendMessage:[line string] type:LogViewMessageTypeInternal];
+    void (^appendInternal)(NSString *, NSString *) = ^(NSString *prefix, NSString *content) {
+        [_logView appendMessage:[event string] type:LogViewMessageTypeInternal];
     };
     
-    if (type == OutputParserLineTypeReset) {
+    if ([type isEqualToString:EventTypeReset]) {
         [_logView reset];
 
-    } else if (type == OutputParserLineTypeMark) {
+    } else if ([type isEqualToString:EventTypeMark]) {
         [_logView appendMark];
 
-    } else if (type == OutputParserLineTypeFileIssue) {
-        OutputParserIssueLine *issueLine = (OutputParserIssueLine *)line;
-        
-        if ([_selectedProject URLWithFilePath:[issueLine path]]) {
-            [_logView appendIssueWithPath:[issueLine path] lineNumber:[issueLine lineNumber] issueString:[issueLine issueString]];
-
-        } else {
-            [_logView appendMessage:[issueLine string] type:LogViewMessageTypeDefault];
-        }
+    } else if ([type isEqualToString:EventTypeIssue]) {
+        IssueEvent *issueEvent = (IssueEvent *)event;
+       
+        [_logView appendIssueWithPath:[issueEvent path] lineNumber:[issueEvent lineNumber] issueString:[issueEvent issueString]];
     
-    } else if (type == OutputParserLineTypeLight) {
-        OutputParserLightLine *lightLine = (OutputParserLightLine *)line;
-      
-        NSColor   *lightColor = [lightLine color];
-        NSString  *lightName  = [lightLine lightName];
+    } else if ([type isEqualToString:EventTypeLight]) {
+        LightEvent *lightEvent = (LightEvent *)event;
+
+        NSString  *lightColor = [lightEvent colorString];
+        NSString  *lightName  = [lightEvent lightName];
         LightView *lightView  = [_nameToLightViewMap objectForKey:lightName];
     
         if (lightView) {
-            [lightView setColor:lightColor];
+            [lightView setColor:GetColorForString(lightColor)];
         } else {
-            appendError(NSLocalizedString(@"Unknown light: ", nil), [line string]);
+            appendInternal(NSLocalizedString(@"Unknown light: ", nil), [event string]);
         }
     
-    } else if (type == OutputParserLineTypeParseError) {
-        appendError(NSLocalizedString(@"Parse error: ", nil), [line string]);
+    } else if ([type isEqualToString:EventTypeInternal]) {
+        appendInternal(NSLocalizedString(@"Parse error: ", nil), [event string]);
     
-    } else if (type == OutputParserLineTypeMessage) {
-        [_logView appendMessage:[line string] type:LogViewMessageTypeDefault];
+    } else if ([type isEqualToString:EventTypeMessage]) {
+        if ([event location] == EventLocationErrorStream) {
+            [_logView appendMessage:[event string] type:LogViewMessageTypeFromErrorStream];
+        } else {
+            [_logView appendMessage:[event string] type:LogViewMessageTypeFromOutputStream];
+        }
 
-    } else if (type == OutputParserLineTypeError) {
-        [_logView appendMessage:[line string] type:LogViewMessageTypeError];
+    } else if ([type isEqualToString:EventTypeInternal]) {
+        [_logView appendMessage:[event string] type:LogViewMessageTypeInternal];
     }
+    
+    
+    NSMutableDictionary *userInfo = [[event dictionaryRepresentation] mutableCopy];
+    [userInfo setObject:[[_selectedProject URL] path] forKey:@"project"];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"net.musictheory.spork.event" object:nil userInfo:userInfo];
 }
 
 
@@ -484,7 +489,7 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 - (void) _handlePreferencesDidChange:(NSNotification *)note
 {
-    [self _rebuildTextView];
+    [self _updateColors];
 }
 
 
@@ -527,16 +532,21 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 - (void) taskRunStarted:(TaskRun *)taskRun
 {
-    _outputLines   = [NSMutableArray array];
-    _urlToIssueMap = [NSMutableDictionary dictionary];
-    
+    _receivedInit   = NO;
+    _shouldSendStop = NO;
     [_logView reset];
 }
 
 
 - (void) taskRunStopped:(TaskRun *)taskRun
 {
+    if (_shouldSendStop) {
+        Event *stopEvent = [[Event alloc] init];
+        [stopEvent setType:EventTypeStop];
+        [stopEvent setString:@"[spork] stop"];
 
+        [self _dispatchEvent:stopEvent];
+    }
 }
 
 
@@ -546,22 +556,34 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         _outputParser = [[OutputParser alloc] init];
     }
     
-    OutputParserLine    *line = [_outputParser lineForLineData:data];
-    OutputParserLineType type = [line type];
+    Event *event = [_outputParser eventForLineData:data project:_selectedProject fromStandardError:fromStandardError];
     
-    if (fromStandardError && (type == OutputParserLineTypeMessage)) {
-        [line setType:OutputParserLineTypeError];
-    }
+    if (!_receivedInit && ([event type] != EventTypeInit)) {
+        Event *initEvent  = [[Event alloc] init];
+        Event *startEvent = [[Event alloc] init];
+        
+        [initEvent setType:EventTypeInit];
+        [initEvent setString:@"[spork] init"];
 
-    [self _appendOutputLine:line];
+        [startEvent setType:EventTypeStart];
+        [startEvent setString:@"[spork] start"];
+
+        [self _dispatchEvent:initEvent];
+        [self _dispatchEvent:startEvent];
+
+        _receivedInit   = YES;
+        _shouldSendStop = YES;
+    }
+    
+    [self _dispatchEvent:event];
 }
 
 
 #pragma mark - Log View Delegate
 
-- (void) logView:(LogView *)logView clickedOnFileURL:(NSURL *)fileURL line:(NSInteger)lineNumber
+- (void) logView:(LogView *)logView clickedOnIssueWithPath:(NSString *)path line:(NSInteger)lineNumber
 {
-    NSLog(@"%@:%ld", fileURL, (long)lineNumber);
+    NSLog(@"%@ %ld", [_selectedProject URLWithFilePath:path], (long)lineNumber);
 }
 
 

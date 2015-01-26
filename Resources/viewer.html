@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Build Spork</title>
+<style>
+body {
+    margin: 2px 0px 2px 0px;
+}
+
+div {
+    line-height: 125%;
+}
+
+.message, .issue {
+    padding-left:  4px;
+    padding-right: 16px;
+}
+
+.mark {
+    margin-top: 2px;
+    padding-bottom: 4px;
+}
+
+.internal {
+    opacity: 0.5;
+}
+
+a       { text-decoration: none;      }
+a:hover { text-decoration: underline; }
+
+
+</style>
+<script type="text/javascript">
+
+
+var sBodyRuleIndex  = -1;
+var sErrorRuleIndex = -1;
+var sLinkRuleIndex  = -1;
+var sMarkRuleIndex  = -1;
+
+function sporkConfig(font, foreground, background, error, link)
+{
+    var sheet = document.styleSheets[0];
+    var index = 0;
+
+    if (sLinkRuleIndex  >= 0) sheet.deleteRule(sLinkRuleIndex);
+    if (sErrorRuleIndex >= 0) sheet.deleteRule(sErrorRuleIndex);
+    if (sBodyRuleIndex  >= 0) sheet.deleteRule(sBodyRuleIndex);
+    if (sMarkRuleIndex  >= 0) sheet.deleteRule(sMarkRuleIndex);
+    
+    sBodyRuleIndex = sheet.insertRule("body { " + [
+        "font: ",             font,       ";",
+        "background-color: ", background, ";",
+        "color:  ",           foreground, ";"
+    ].join("") + "}", index++);
+
+    sErrorRuleIndex = sheet.insertRule(
+        ".stderr { color:" + error + "}",
+        index++
+    );
+
+    sLinkRuleIndex = sheet.insertRule(
+        ".link { color:" + link + "}",
+        index++
+    );
+
+    sMarkRuleIndex = sheet.insertRule(
+        ".mark { border-top: 2px dashed " + foreground + "; opacity: 0.25; }",
+        index++
+    );
+}
+
+
+function sporkReset()
+{
+    var body = document.body;
+
+    while (body.hasChildNodes()) {
+        body.removeChild(body.lastChild);
+    }
+}
+
+
+function sporkMark()
+{
+    var div = document.createElement("div");
+    div.className = "mark";
+    document.body.appendChild(div);
+}
+
+
+function sporkMessage(message, typeString)
+{
+    var div = document.createElement("div");
+
+    div.className = "message " + typeString;
+    div.appendChild(document.createTextNode(message));
+
+    document.body.appendChild(div);
+}
+
+
+function sporkIssue(number, file, line, message)
+{
+    var div = document.createElement("div");
+
+    var a = document.createElement("a");
+    a.innerText = file + ":" + line;
+    a.href = "issue://" + number;
+    a.className = "link";
+
+    div.className = "issue";
+    div.appendChild(a);
+    div.appendChild(document.createTextNode(" " + message));
+
+    document.body.appendChild(div);
+}
+
+</script>
+
+</head>
+<body>
+</body>
+</html>

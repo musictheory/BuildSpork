@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2015, Ricci Adams
+    Copyright (c) 2015, musictheory.net, LLC
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following condition is met:
@@ -25,7 +25,7 @@
 #import "ProjectManager.h"
 
 
-static NSString * const sProjectPasteboardType = @"com.iccir.BuildSpork.Project";
+static NSString * const sProjectPasteboardType = @"net.musictheory.BuildSpork.Project";
 
 
 @interface ProjectsWindowController () <NSOpenSavePanelDelegate, NSTableViewDelegate, NSTableViewDataSource>

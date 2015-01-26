@@ -28,6 +28,8 @@
 		555EAB911A70A9AF0042A4B6 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB901A70A9AF0042A4B6 /* Preferences.m */; };
 		555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB931A70BA560042A4B6 /* FontPreviewField.m */; };
 		555EAB9A1A71CE8A0042A4B6 /* LogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB991A71CE8A0042A4B6 /* LogView.m */; };
+		555EAB9D1A71E6890042A4B6 /* viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = 555EAB9C1A71E6890042A4B6 /* viewer.html */; };
+		55F865451A73B851000EEFE6 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F865441A73B851000EEFE6 /* Event.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +71,9 @@
 		555EAB931A70BA560042A4B6 /* FontPreviewField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontPreviewField.m; path = Source/FontPreviewField.m; sourceTree = "<group>"; };
 		555EAB981A71CE8A0042A4B6 /* LogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogView.h; path = Source/LogView.h; sourceTree = "<group>"; };
 		555EAB991A71CE8A0042A4B6 /* LogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogView.m; path = Source/LogView.m; sourceTree = "<group>"; };
+		555EAB9C1A71E6890042A4B6 /* viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = viewer.html; path = Resources/viewer.html; sourceTree = SOURCE_ROOT; };
+		55F865431A73B851000EEFE6 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Source/Event.h; sourceTree = "<group>"; };
+		55F865441A73B851000EEFE6 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = Source/Event.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +122,7 @@
 		5530D7D41A6E52A600CFEBE9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				555EAB9C1A71E6890042A4B6 /* viewer.html */,
 				5530D8061A6E554A00CFEBE9 /* MainMenu.xib */,
 				5530D81A1A6E57CF00CFEBE9 /* ProjectsWindow.xib */,
 				555EAB891A70A5740042A4B6 /* PreferencesWindow.xib */,
@@ -150,6 +156,8 @@
 				5530D8201A6E666300CFEBE9 /* JSONTypechecker.m */,
 				555EAB861A7071B00042A4B6 /* OutputParser.h */,
 				555EAB871A7071B00042A4B6 /* OutputParser.m */,
+				55F865431A73B851000EEFE6 /* Event.h */,
+				55F865441A73B851000EEFE6 /* Event.m */,
 				555EAB8F1A70A9AF0042A4B6 /* Preferences.h */,
 				555EAB901A70A9AF0042A4B6 /* Preferences.m */,
 				5530D8141A6E568B00CFEBE9 /* Project.h */,
@@ -243,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				555EAB9D1A71E6890042A4B6 /* viewer.html in Resources */,
 				5530D8051A6E553B00CFEBE9 /* Images.xcassets in Resources */,
 				555EAB8B1A70A5740042A4B6 /* PreferencesWindow.xib in Resources */,
 				5530D8331A6E6FDA00CFEBE9 /* ViewerWindow.xib in Resources */,
@@ -262,6 +271,7 @@
 				5530D7FC1A6E548800CFEBE9 /* AppDelegate.m in Sources */,
 				5530D8301A6E6FCD00CFEBE9 /* ViewerWindowController.m in Sources */,
 				555EAB411A6F34450042A4B6 /* Utils.m in Sources */,
+				55F865451A73B851000EEFE6 /* Event.m in Sources */,
 				555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */,
 				5530D8161A6E568B00CFEBE9 /* Project.m in Sources */,
 				5530D8191A6E569200CFEBE9 /* ProjectsWindowController.m in Sources */,

@@ -19,10 +19,45 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-extern NSArray *Map(id<NSFastEnumeration> collection, id (^callback)(id item));
-extern BOOL MatchRegularExpression(NSRegularExpression *re, NSString *string, void (^callback)(NSArray *));
+#import <Foundation/Foundation.h>
 
-extern BOOL IsDarkColor(NSColor *color);
+typedef NS_ENUM(NSInteger, EventLocation) {
+    EventLocationOutputStream,
+    EventLocationErrorStream
+};
 
-extern NSString *GetStringForColor(NSColor  *color);
-extern NSColor  *GetColorForString(NSString *string);
+
+extern NSString * const EventTypeInit;
+extern NSString * const EventTypeStart;
+extern NSString * const EventTypeStop;
+extern NSString * const EventTypeReset;
+extern NSString * const EventTypeMark;
+extern NSString * const EventTypeMessage;
+extern NSString * const EventTypeInternal;
+extern NSString * const EventTypeLight;     // class = LightEvent
+extern NSString * const EventTypeIssue;     // class = IssueEvent
+
+
+@interface Event : NSObject
+@property (copy) NSString *type;
+@property (copy) NSString *string;
+
+@property (readonly) NSDictionary *dictionaryRepresentation;
+
+@property EventLocation location;
+
+@end
+
+
+@interface LightEvent : Event
+@property (copy) NSString *lightName;
+@property (copy) NSString *colorString;
+@end
+
+
+@interface IssueEvent : Event
+@property (copy) NSString  *path;
+@property        NSInteger  lineNumber;
+@property        NSInteger  columnNumber; // May be NSNotFound
+@property (copy) NSString  *issueString;
+@end

@@ -33,6 +33,7 @@ task("logs", function() {
 
 task("files", function() {
     log("Testing files!");
+    log("[spork] mark");
     log("Control.oj:25 fake issue on line 25");
     log("Control.oj:35:3 with column");
     log("Folder/File with Space.oj:1 fake issue on line 1");
