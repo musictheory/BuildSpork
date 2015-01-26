@@ -12,6 +12,8 @@ More importantly, [Sublime Text](http://www.sublimetext.com) lacks real support 
 
 ### Design
 
+![Screenshot](https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/window.png)
+
 The Build Spork window comprises four sections:
 
 **Projects** - a list of projects.  You can add and remove projects via the Projects window.
