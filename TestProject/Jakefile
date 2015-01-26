@@ -41,12 +41,14 @@ task("files", function() {
 });
 
 
-task("moo", function() {
-    log("Moo!");
+task("action", function() {
+    log("This is an action!");
+    wait(0.5);                   
+    log("Actions are similar to targets, but appear in the Build Spork window as separate buttons.")
 });
 
-task("oink", function() {
-    log("Oink!");
+task("another-action", function() {
+    log("This is another action!");
 });
 
 task("lights", function() {

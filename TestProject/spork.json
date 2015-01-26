@@ -12,8 +12,8 @@
     ],
 
     "actions": [
-        { "title": "Moo",   "command": "jake moo"  },
-        { "title": "Oink",  "command": "jake oink" }
+        { "title": "Action",   "command": "jake action"  },
+        { "title": "Action 2", "command": "jake another-action" }
     ],
 
     "lights": [
