@@ -1,6 +1,6 @@
 # Build Spork
 
-<img src="https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/screenshot.png" width="834" height="330">
+<img src="https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/screenshot.png" width="789" height="286">
 
 Build Spork provides a graphical user interface to build tools such as [jake](http://jakejs.com) or [rake](https://github.com/ruby/rake).
 
