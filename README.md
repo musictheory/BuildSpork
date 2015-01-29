@@ -22,8 +22,6 @@ The Build Spork window comprises four sections:
 
 **Actions** - additional button.  An action is ran immediately when pressed.
 
-**Lights** - status lights.  Your build script can set the color of each light.
-
 
 ### Configuration
 
@@ -49,7 +47,7 @@ If a line starts with `[spork]`, Build Spork instead interprets it as a special 
 
 `[spork] mark` - Appends a horizontal line rule to the log 
 
-`[spork] light light_name light_color` - Changes the light named `light_name` to the color `light_color`.  Example: `[spork] light test #ff0000`
+`[spork] info message_content` - Appends an "info" message, which appears in faded color.
 
 `[spork] init` - Informs Build Spork that your script is long-running and may contain multiple start/stop events.  If your script
 does not output an `init` event in the first line, Build Spork assumes your script runs for a single build.
@@ -58,13 +56,13 @@ does not output an `init` event in the first line, Build Spork assumes your scri
 
 `[spork] stop` - Informs Build Spork that a build stopped.  This event is automatically broadcasted for single-build scripts.
 
-Note: When a script is ran by Build Spork, the `net.musictheory.spork` environment variable is set to `1`.  When this variable is not set, you may wish to suppress `[spork]` messages.
+Note: When a script is ran by Build Spork, the `net_musictheory_spork` environment variable is set to `1`.  When this variable is not set, you may wish to suppress `[spork]` messages.
 
 ### Notifications
 
 All events are broadcasted via [NSDistributedNotificationCenter](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSDistributedNotificationCenter_Class/index.html)
 with a notification name of `net.musictheory.spork.event`.
 
+When the user clicks on a file issue, Build Spork emits a `net.musictheory.spork.open` notification.
+
 Look at the example Sublime Text plug-in to see how to integrate these notifications with an editor.
-
-
