@@ -120,15 +120,16 @@
                     <popUpButton verticalHuggingPriority="750" id="Wko-We-va6">
                         <rect key="frame" x="106" y="17" width="197" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="Dock" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="1v5-Vg-TzX" id="E4X-tv-GrL">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="E4X-tv-GrL">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="lix-gL-vbZ">
                                 <items>
-                                    <menuItem title="Dock" state="on" tag="1" id="1v5-Vg-TzX">
+                                    <menuItem title="Dock" tag="1" id="1v5-Vg-TzX">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                     <menuItem title="Menu Bar" id="Efx-qZ-lDU"/>
+                                    <menuItem title="None" tag="2" id="pFy-bO-REC"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>

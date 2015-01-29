@@ -34,6 +34,9 @@
     if ((self = [super init])) {
         _command = command;
         _project = project;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleApplicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
+
     }
 
     return self;
@@ -47,6 +50,12 @@
 
 
 #pragma mark - Private Methods
+
+- (void) _handleApplicationWillTerminate:(NSNotification *)note
+{
+    [_task terminate];
+}
+
 
 - (void) _taskDidTerminate
 {
@@ -99,7 +108,7 @@
         [environment setObject:replacement forKey:key];
     }
     
-    [environment setObject:@"1" forKey:@"net.musictheory.spork"];
+    [environment setObject:@"1" forKey:@"net_musictheory_spork"];
 
     [_task setEnvironment:environment];
 

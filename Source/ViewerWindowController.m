@@ -31,7 +31,8 @@
 #import "TaskRun.h"
 #import "Preferences.h"
 
-static NSInteger ShowProjectsTag = -1000;
+static NSInteger ShowProjectsTag    = -1000;
+static NSInteger ShowPreferencesTag = -1001;
 static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 @interface ViewerWindowController () <NSToolbarDelegate, TaskRunDelegate, LogViewDelegate>
@@ -60,6 +61,7 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     
     BOOL _receivedInit;
     BOOL _shouldSendStop;
+    NSTimeInterval _taskStartTime;
 }
 
 
@@ -204,9 +206,15 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
     [[popUpButton menu] addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem *showProjects = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Show Projects", nil) action:nil keyEquivalent:@""];
+    NSMenuItem *showProjects = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Show Projects\\U2026", nil) action:nil keyEquivalent:@""];
     [showProjects setTag:ShowProjectsTag];
     [[popUpButton menu] addItem:showProjects];
+    
+    if ([[Preferences sharedInstance] iconMode] == IconModeNone) {
+        NSMenuItem *showPreferences = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Show Preferences\\U2026", nil) action:nil keyEquivalent:@""];
+        [showPreferences setTag:ShowPreferencesTag];
+        [[popUpButton menu] addItem:showPreferences];
+    }
 
     NSToolbarItem *toolbarItem = [[NSToolbarItem alloc] initWithItemIdentifier:@"project"];
     [toolbarItem setView:popUpButton];
@@ -237,10 +245,11 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         } else {
             item = [[NSMenuItem alloc] initWithTitle:title action:nil keyEquivalent:@""];
             [item setTag:index];
-            index++;
         }
         
         [[result menu] addItem:item];
+
+        index++;
     }
     
     [result sizeToFit];
@@ -421,6 +430,9 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
             [_logView appendMessage:[event string] type:LogViewMessageTypeFromOutputStream];
         }
 
+    } else if ([type isEqualToString:EventTypeInfo]) {
+        [_logView appendMessage:[event string] type:LogViewMessageTypeInfo];
+
     } else if ([type isEqualToString:EventTypeInternal]) {
         [_logView appendMessage:[event string] type:LogViewMessageTypeInternal];
     }
@@ -441,6 +453,10 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         
         if (selectedTag == ShowProjectsTag) {
             [(id)[NSApp delegate] showProjects:self];
+
+        } else if (selectedTag == ShowPreferencesTag) {
+            [(id)[NSApp delegate] showPreferences:self];
+
         } else {
             NSArray *projects = [[ProjectManager sharedInstance] projects];
             
@@ -490,6 +506,7 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 - (void) _handlePreferencesDidChange:(NSNotification *)note
 {
     [self _updateColors];
+    [self _updateProjectsItem];
 }
 
 
@@ -534,6 +551,7 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 {
     _receivedInit   = NO;
     _shouldSendStop = NO;
+    _taskStartTime = [NSDate timeIntervalSinceReferenceDate];
     [_logView reset];
 }
 
@@ -546,6 +564,14 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         [stopEvent setString:@"[spork] stop"];
 
         [self _dispatchEvent:stopEvent];
+
+        NSTimeInterval elapsed = [NSDate timeIntervalSinceReferenceDate] - _taskStartTime;
+
+        Event *infoEvent = [[Event alloc] init];
+        [infoEvent setType:EventTypeInfo];
+        [infoEvent setString:[NSString stringWithFormat:@"Task finished in %.1f seconds", elapsed]];
+
+        [self _dispatchEvent:infoEvent];
     }
 }
 
@@ -557,22 +583,28 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     }
     
     Event *event = [_outputParser eventForLineData:data project:_selectedProject fromStandardError:fromStandardError];
+    NSString *type = [event type];
     
-    if (!_receivedInit && ([event type] != EventTypeInit)) {
-        Event *initEvent  = [[Event alloc] init];
-        Event *startEvent = [[Event alloc] init];
-        
-        [initEvent setType:EventTypeInit];
-        [initEvent setString:@"[spork] init"];
+    if (!_receivedInit) {
+        if ([type isEqualToString:EventTypeInit]) {
+            _receivedInit = YES;
 
-        [startEvent setType:EventTypeStart];
-        [startEvent setString:@"[spork] start"];
+        } else {
+            Event *initEvent  = [[Event alloc] init];
+            Event *startEvent = [[Event alloc] init];
+            
+            [initEvent setType:EventTypeInit];
+            [initEvent setString:@"[spork] init"];
 
-        [self _dispatchEvent:initEvent];
-        [self _dispatchEvent:startEvent];
+            [startEvent setType:EventTypeStart];
+            [startEvent setString:@"[spork] start"];
 
-        _receivedInit   = YES;
-        _shouldSendStop = YES;
+            [self _dispatchEvent:initEvent];
+            [self _dispatchEvent:startEvent];
+
+            _receivedInit   = YES;
+            _shouldSendStop = YES;
+        }
     }
     
     [self _dispatchEvent:event];
@@ -583,7 +615,19 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
 
 - (void) logView:(LogView *)logView clickedOnIssueWithPath:(NSString *)path line:(NSInteger)lineNumber
 {
-    NSLog(@"%@ %ld", [_selectedProject URLWithFilePath:path], (long)lineNumber);
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    
+    NSString *lineString = [NSString stringWithFormat:@"%ld", (long)lineNumber];
+
+    [userInfo setObject:[[_selectedProject URL] path] forKey:@"project"];
+    [userInfo setObject:path       forKey:@"path"];
+    [userInfo setObject:lineString forKey:@"line"];
+    
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"net.musictheory.spork.open" object:nil userInfo:userInfo];
+    
+    // Sublime should activate itself, but I'm having problems doing that from within the plugin_host
+    NSArray *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.sublimetext.3"];
+    [[apps lastObject] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
 }
 
 

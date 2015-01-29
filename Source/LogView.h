@@ -22,16 +22,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class OutputParserLine;
-
 typedef NS_ENUM(NSInteger, LogViewMessageType) {
     LogViewMessageTypeFromOutputStream = 0,
     LogViewMessageTypeFromErrorStream  = 1,
+    LogViewMessageTypeInfo             = 2,
     LogViewMessageTypeInternal         = 2
 };
 
 @protocol LogViewDelegate;
-
 
 @interface LogView : NSView
 

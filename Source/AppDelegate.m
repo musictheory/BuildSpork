@@ -49,9 +49,13 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handlePreferencesDidChange:) name:PreferencesDidChangeNotification object:nil];
 
-    if ([[Preferences sharedInstance] iconMode] == IconModeDock) {
+    if ([[Preferences sharedInstance] iconMode] != IconModeMenuBar) {
         [self showViewer:self];
     }
+    
+    NSDistributedNotificationCenter *center = [NSDistributedNotificationCenter defaultCenter];
+    
+    [center addObserver:self selector:@selector(_handleSporkBuildCommand:) name:@"net.musictheory.spork.build" object:nil];
 }
 
 
@@ -62,6 +66,17 @@
     }
 
     return YES;
+}
+
+
+- (BOOL) applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    return [[Preferences sharedInstance] iconMode] == IconModeNone;
+}
+
+
+- (void) _handleSporkBuildCommand:(NSNotification *)note
+{
 }
 
 
@@ -141,6 +156,7 @@
     }
 
     [_viewerWindowController showWindow:self];
+    [NSApp activateIgnoringOtherApps:NO];
 }
 
 
@@ -151,6 +167,7 @@
     }
 
     [_preferencesWindowController showWindow:self];
+    [NSApp activateIgnoringOtherApps:NO];
 }
 
 
@@ -161,6 +178,7 @@
     }
 
     [_projectsWindowController showWindow:self];
+    [NSApp activateIgnoringOtherApps:NO];
 }
 
 

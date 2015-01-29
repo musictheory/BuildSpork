@@ -25,12 +25,17 @@
 
 - (void) drawRect:(NSRect)dirtyRect
 {
-    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+    NSBezierPath *outerPath = [NSBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 2, 2)];
+    if (_color) {
+        [_color set];
+        [outerPath fill];
+    }
     
-    NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:[self bounds]];
-    [_color set];
-    
-    [path fill];
+    NSBezierPath *innerPath = [NSBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 3, 3)];
+    [outerPath appendBezierPath:[innerPath bezierPathByReversingPath]];
+
+    [[NSColor colorWithSRGBRed:0 green:0 blue:0 alpha:0.2] set];
+    [outerPath fill];
 }
 
 

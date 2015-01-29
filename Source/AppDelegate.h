@@ -25,6 +25,7 @@
 
 - (IBAction) showViewer:(id)sender;
 - (IBAction) showProjects:(id)sender;
+- (IBAction) showPreferences:(id)sender;
 
 @end
 

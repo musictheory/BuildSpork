@@ -157,6 +157,8 @@
     NSString *typeString = @"stdout";
     if (type == LogViewMessageTypeInternal) {
         typeString = @"internal";
+    } else if (type == LogViewMessageTypeInfo) {
+        typeString = @"info";
     } else if (type == LogViewMessageTypeFromErrorStream) {
         typeString = @"stderr";
     }

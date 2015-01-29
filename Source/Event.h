@@ -33,6 +33,7 @@ extern NSString * const EventTypeStop;
 extern NSString * const EventTypeReset;
 extern NSString * const EventTypeMark;
 extern NSString * const EventTypeMessage;
+extern NSString * const EventTypeInfo;
 extern NSString * const EventTypeInternal;
 extern NSString * const EventTypeLight;     // class = LightEvent
 extern NSString * const EventTypeIssue;     // class = IssueEvent

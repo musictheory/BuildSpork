@@ -28,6 +28,7 @@ NSString * const EventTypeStop     = @"stop";
 NSString * const EventTypeReset    = @"reset";
 NSString * const EventTypeMark     = @"mark";
 NSString * const EventTypeMessage  = @"message";
+NSString * const EventTypeInfo     = @"info";
 NSString * const EventTypeLight    = @"light";
 NSString * const EventTypeIssue    = @"issue";
 NSString * const EventTypeInternal = @"internal";

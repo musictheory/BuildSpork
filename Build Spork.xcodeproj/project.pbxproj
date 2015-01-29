@@ -33,7 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5530D7D11A6E52A600CFEBE9 /* Builder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Builder.app; path = "Build Spork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5530D7D11A6E52A600CFEBE9 /* Build Spork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Build Spork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5530D7D51A6E52A600CFEBE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		5530D7F71A6E548700CFEBE9 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Source/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		5530D7F81A6E548700CFEBE9 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Source/AppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -104,7 +104,7 @@
 		5530D7D21A6E52A600CFEBE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5530D7D11A6E52A600CFEBE9 /* Builder.app */,
+				5530D7D11A6E52A600CFEBE9 /* Build Spork.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,7 +211,7 @@
 			);
 			name = "Build Spork";
 			productName = "Build Spork";
-			productReference = 5530D7D11A6E52A600CFEBE9 /* Builder.app */;
+			productReference = 5530D7D11A6E52A600CFEBE9 /* Build Spork.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

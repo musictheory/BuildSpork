@@ -1,5 +1,6 @@
 import sublime
 import codecs
+import subprocess
 
 from ctypes import *
 from ctypes.util import find_library
@@ -50,7 +51,7 @@ CFStringGetLength.restype = c_long
 
 # Helper Functions
 
-def CreateString(string):
+def CreateCFString(string):
     b = bytes(string, 'utf-8')
     return CFStringCreateWithBytes(None, b, len(b), 0x08000100, False)
 
@@ -58,11 +59,7 @@ def Release(object):
     if (object):
         CFRelease(object)
 
-def GetDictionaryValueAsString(cfDictionary, key):
-    keyString = CreateString(key)
-    cfString = CFDictionaryGetValue(cfDictionary, keyString)
-    Release(keyString)
-
+def GetStringFromCFString(cfString):
     characterCount = CFStringGetLength(cfString)
     range = CFRange(0, characterCount)
     b = create_string_buffer(characterCount * 2)
@@ -71,25 +68,45 @@ def GetDictionaryValueAsString(cfDictionary, key):
 
     return codecs.decode(b.raw, "utf_16_le")
 
+def GetDictionaryValueAsString(cfDictionary, key):
+    keyString = CreateCFString(key)
+    cfString = CFDictionaryGetValue(cfDictionary, keyString)
+    Release(keyString)
+
+    return GetStringFromCFString(cfString)
+
 
 # Notifications
 
-def handleDistributedNotification(center, observer, name, object, userInfo):
+def handleDistributedNotification(center, observer, name_CFString, object, userInfo):
+    name = GetStringFromCFString(name_CFString)
+
     if (userInfo):
-        handleIncomingDictionary(userInfo)
+        if (name == "net.musictheory.spork.event"):
+            handleSporkEvent(userInfo)
+        elif (name == "net.musictheory.spork.open"):
+            handleSporkOpen(userInfo)
 
 
 class NotificationListener:
     def __init__(self):
         self.observer  = CFNotificationCallback(handleDistributedNotification)
-        self.eventName = CreateString("net.musictheory.spork.event")
+
+        self.eventString = CreateCFString("net.musictheory.spork.event")
+        self.openString  = CreateCFString("net.musictheory.spork.open")
+
         center = CFNotificationCenterGetDistributedCenter()
-        CFNotificationCenterAddObserver(center, self.observer, self.observer, self.eventName, None, 4)
+        CFNotificationCenterAddObserver(center, self.observer, self.observer, self.eventString, None, 4)
+        CFNotificationCenterAddObserver(center, self.observer, self.observer, self.openString,  None, 4)
 
     def __del__(self):
         center = CFNotificationCenterGetDistributedCenter()
-        CFNotificationCenterRemoveObserver(center, self.observer, self.eventName, None)
-        Release(self.eventName)
+
+        CFNotificationCenterRemoveObserver(center, self.observer, self.eventString, None)
+        CFNotificationCenterRemoveObserver(center, self.observer, self.openString,  None)
+
+        Release(self.eventString)
+        Release(self.openString)
 
 listener = NotificationListener()
 
@@ -103,30 +120,48 @@ sublime.set_timeout(Tick, 100)
 
 # BuildSpork specific
 
+def GetWindow(project_name):
+    for w in sublime.windows():
+        window_project_name = w.project_file_name()
+
+        if (not window_project_name):
+            continue
+
+        if (window_project_name.startswith(project_name)):
+            return w
+
+    return None
+
+
 projectToManagerMap = { }
 
 class ProjectIssueManager():
     def __init__(self, window, project):
         self.window = window
         self.issueCount = 0
-        self.panel = self.window.create_output_panel("BuildSpork")
+        
+        panel = self.window.create_output_panel("BuildSpork")
+        panel.settings().set("result_file_regex", "^([^:]*):([0-9]+):?([0-9]+)?:? (.*)$")
+        panel.settings().set("result_line_regex", "")
+        panel.settings().set("result_base_dir", project)
+        panel.settings().set("word_wrap", True)
+        panel.settings().set("line_numbers", False)
+        panel.settings().set("gutter", False)
+        panel.settings().set("scroll_past_end", False)
+        panel.assign_syntax("Packages/Text/Plain text.tmLanguage")
 
-        self.panel.settings().set("result_file_regex", "^([^:]*):([0-9]+):?([0-9]+)?:? (.*)$")
-        self.panel.settings().set("result_line_regex", "")
-        self.panel.settings().set("result_base_dir", project)
-        self.panel.settings().set("word_wrap", True)
-        self.panel.settings().set("line_numbers", False)
-        self.panel.settings().set("gutter", False)
-        self.panel.settings().set("scroll_past_end", False)
-        self.panel.assign_syntax("Packages/Text/Plain text.tmLanguage")
+        self.panel = panel
 
     def handleStart(self):
-        print("start")
-
+        print("handleStart", self.panel)
         self.issueCount = 0
-        self.panel.run_command("erase_view")
+        self.panel.run_command("select_all")
+        self.panel.run_command("right_delete")
+
 
     def handleStop(self):
+        print("handleStop")
+
         if (self.issueCount == 0):
             self.window.run_command("hide_panel", { "panel": "output.BuildSpork" })
 
@@ -138,7 +173,35 @@ class ProjectIssueManager():
             self.window.run_command("show_panel", { "panel": "output.BuildSpork" })
 
 
-def handleIncomingDictionary(dictionary):
+def handleSporkOpen(dictionary):
+    project = GetDictionaryValueAsString(dictionary, "project")
+    path    = GetDictionaryValueAsString(dictionary, "path")
+    line    = GetDictionaryValueAsString(dictionary, "line")
+
+    window = GetWindow(project)
+    fullPath = project + "/" + path
+
+    if (not window):
+        for w in sublime.windows():
+            if (w.find_open_file(fullPath)):
+                window = w;
+                break;
+
+    if (not window):
+        sublime.run_command("open_file", { "file": fullPath })
+
+        for w in sublime.windows():
+            if (w.find_open_file(fullPath)):
+                window = w;
+                break;
+
+    if (not window):
+        return
+
+    window.open_file(fullPath + ":" + line, sublime.ENCODED_POSITION)
+
+
+def handleSporkEvent(dictionary):
     type    = GetDictionaryValueAsString(dictionary, "type")
     string  = GetDictionaryValueAsString(dictionary, "string")
     project = GetDictionaryValueAsString(dictionary, "project")
@@ -149,17 +212,10 @@ def handleIncomingDictionary(dictionary):
     manager = projectToManagerMap.get(project, None)
 
     if (not manager):
-        for w in sublime.windows():
-            project_name = w.project_file_name()
+        w = GetWindow(project)
 
-            if (not project_name):
-                continue
-
-            if (project_name.startswith(project)):
-                manager = ProjectIssueManager(w, project)
-                break
-
-        if (manager):
+        if (w):
+            manager = ProjectIssueManager(w, project)
             projectToManagerMap[project] = manager
 
     if (not manager):

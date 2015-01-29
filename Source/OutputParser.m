@@ -74,6 +74,13 @@
 
         } else if ([command isEqualToString:@"mark"]) {
             type = EventTypeMark;
+            
+        } else if ([command isEqualToString:@"info"]) {
+            type = EventTypeInfo;
+
+            if (count > 2) {
+                string = [[words subarrayWithRange:NSMakeRange(2, count - 2)] componentsJoinedByString:@" "];
+            }
         
         } else if ([command isEqualToString:@"light"]) {
             cls  = [LightEvent class];

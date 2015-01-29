@@ -62,7 +62,8 @@
 - (void ) windowDidLoad
 {
     [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
-    [_fontPreviewField setSelectedFont:[[Preferences sharedInstance] font]];
+    [_fontPreviewField setFont:[[Preferences sharedInstance] font]];
+    [_fontPreviewField setPreviewDelegate:self];
 }
 
 

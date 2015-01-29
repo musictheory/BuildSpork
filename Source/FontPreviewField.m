@@ -71,7 +71,7 @@
         NSParagraphStyleAttributeName: ps
     }]];
         
-    [_previewDelegate fontPreviewField:self didChangeSelectedFont:_selectedFont];
+    [_previewDelegate fontPreviewField:self didChangeSelectedFont:font];
 }
 
 

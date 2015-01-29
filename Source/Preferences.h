@@ -27,6 +27,7 @@ extern NSString * const PreferencesDidChangeNotification;
 typedef NS_ENUM(NSInteger, IconMode) {
     IconModeMenuBar = 0,
     IconModeDock    = 1,
+    IconModeNone    = 2
 };
 
 

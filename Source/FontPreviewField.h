@@ -27,8 +27,6 @@
 
 - (void) showFontPanel;
 
-@property (nonatomic, strong) NSFont *selectedFont;
-
 @property (weak) id<FontPreviewFieldDelegate> previewDelegate;
 
 @end
