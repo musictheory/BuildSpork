@@ -1,5 +1,7 @@
 # Build Spork
 
+<img src="https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/screenshot.png" width="834" height="330">
+
 Build Spork provides a graphical user interface to build tools such as [jake](http://jakejs.com) or [rake](https://github.com/ruby/rake).
 
 It also broadcasts all events via [NSDistributedNotificationCenter](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSDistributedNotificationCenter_Class/index.html), enabling other processes to listen and act accordingly.
@@ -12,7 +14,7 @@ More importantly, [Sublime Text](http://www.sublimetext.com) lacks real support 
 
 ### Design
 
-![Screenshot](https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/window.png)
+<img src="https://raw.githubusercontent.com/wiki/musictheory/BuildSpork/window.png" width="526" height="82">
 
 The Build Spork window comprises four sections:
 
