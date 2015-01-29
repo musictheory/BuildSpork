@@ -22,7 +22,7 @@ function wait(seconds, callback)
 
 
 task("logs", function() {
-    log("Testing logs!");
+    log("[spork] info Testing logs!");
     for (var i = 0; i < 25; i++) {
         log(i);
         warn(i);
@@ -31,8 +31,52 @@ task("logs", function() {
 });
 
 
+
+task("long", function() {
+    log("[spork] init");
+
+    while (1) {
+        log("[spork] start");
+        log("[spork] reset");
+
+        log("[spork] info Testing long-running!");
+        log("Build Spork supports long-running scripts which watch for file changes and kick off a subsequent build.");
+        wait(2);
+
+        log("[spork] mark");
+        log("At the beginning of your script, send a '[spork] init' to indicate that it is long-running");
+        wait(2);
+
+        log("[spork] mark");
+        log("At the beginning of each build, send '[spork] start'");
+        wait(2);
+
+        log("[spork] mark");
+        log("When the build stops, send '[spork] stop'");
+        wait(2);
+
+        log("[spork] mark");
+        log("You may wish to use '[spork] reset' at the start of each build to clear the console output.");
+        wait(2);
+
+        log("[spork] mark");
+        log("This fake build will start again in 10 seconds!");
+
+        log("[spork] stop");
+
+        wait(10);
+    }
+
+    log("[spork] info Testing logs!");
+    for (var i = 0; i < 25; i++) {
+        log(i);
+        warn(i);
+        wait(0.25);
+    }
+});
+
 task("files", function() {
-    log("Testing files!");
+    log("[spork] info Testing files!");
     log("[spork] mark");
     log("Control.oj:25 fake issue on line 25");
     log("Control.oj:35:3 with column");
@@ -42,25 +86,13 @@ task("files", function() {
 
 
 task("action", function() {
+    log("[spork] info Testing actions!");
     log("This is an action!");
     wait(0.5);                   
     log("Actions are similar to targets, but appear in the Build Spork window as separate buttons.")
 });
 
 task("another-action", function() {
+    log("[spork] info Testing actions!");
     log("This is another action!");
-});
-
-task("lights", function() {
-    log("Testing lights!")       
-    log("[spork] light alpha #ff0000")
-    log("[spork] light beta  #ff0000")
-    log("[spork] light gamma #ff0000")
-    wait(0.5);                   
-    log("[spork] light alpha #00ff00")
-    wait(0.5);                   
-    log("[spork] light beta  #00ff00")
-    wait(0.5);                   
-    log("[spork] light gamma #00ff00")
-    log("Done!")                 
 });

@@ -8,18 +8,13 @@
     "targets": [
         { "title": "Logs",   "command": "jake logs"   },
         { "title": "Files",  "command": "jake files"  },
-        { "title": "Lights", "command": "jake lights" }
+        { "title": "-" },
+        { "title": "Long-running",  "command": "jake long"  }
     ],
 
     "actions": [
         { "title": "Action",   "command": "jake action"  },
         { "title": "Action 2", "command": "jake another-action" }
-    ],
-
-    "lights": [
-        { "name": "alpha",  "title": "a", "tooltip": "The Alpha Light!" },
-        { "name": "beta",   "title": "b", "tooltip": "The Beta Light!"  },
-        { "name": "gamma",  "title": "c", "tooltip": "The Gamma Light!" }
     ]
 }
  

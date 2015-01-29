@@ -35,7 +35,6 @@ extern NSString * const EventTypeMark;
 extern NSString * const EventTypeMessage;
 extern NSString * const EventTypeInfo;
 extern NSString * const EventTypeInternal;
-extern NSString * const EventTypeLight;     // class = LightEvent
 extern NSString * const EventTypeIssue;     // class = IssueEvent
 
 
@@ -47,12 +46,6 @@ extern NSString * const EventTypeIssue;     // class = IssueEvent
 
 @property EventLocation location;
 
-@end
-
-
-@interface LightEvent : Event
-@property (copy) NSString *lightName;
-@property (copy) NSString *colorString;
 @end
 
 

@@ -23,7 +23,6 @@
 
 #import "AppDelegate.h"
 #import "Event.h"
-#import "LightView.h"
 #import "LogView.h"
 #import "Project.h"
 #import "ProjectManager.h"
@@ -48,13 +47,11 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
     NSToolbarItem *_targetToolbarItem;
     NSToolbarItem *_buildToolbarItem;
     NSArray       *_actionToolbarItems;
-    NSArray       *_lightToolbarItems;
 
     NSPopUpButton *_projectPopUpButton;
     NSPopUpButton *_targetPopUpButton;
     
     NSMutableDictionary *_identifierToItemMap;
-    NSMutableDictionary *_nameToLightViewMap;
     
     TaskRun      *_currentRun;
     OutputParser *_outputParser;
@@ -145,10 +142,6 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
             addItem(item);
         }
 
-        for (NSToolbarItem *item in _lightToolbarItems) {
-            addItem(item);
-        }
-
         addItem( [[NSToolbarItem alloc] initWithItemIdentifier:NSToolbarFlexibleSpaceItemIdentifier] );
         
         _identifierToItemMap = identifierToItemMap;
@@ -178,10 +171,6 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         }
 
         [toolbar insertItemWithItemIdentifier:NSToolbarFlexibleSpaceItemIdentifier atIndex:index++];
-
-        for (NSToolbarItem *item in _lightToolbarItems) {
-            addItemWithIdentifier([item itemIdentifier]);
-        }
     }
     
     [toolbar validateVisibleItems];
@@ -334,36 +323,6 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         _actionToolbarItems = actionToolbarItems;
     }
 
-
-    // Build Light items
-    {
-        NSMutableArray      *lightToolbarItems  = [NSMutableArray array];
-        NSMutableDictionary *nameToLightViewMap = [NSMutableDictionary dictionary];
-
-        NSInteger index = 0;
-
-        for (ProjectLight *light in [project lights]) {
-            if (![light name]) continue;
-
-            LightView *lightView = [[LightView alloc] initWithFrame:NSMakeRect(0, 0, 22, 22)];
-            [lightView setToolTip:[light tooltip]];
-
-            [nameToLightViewMap setObject:lightView forKey:[light name]];
-
-            NSToolbarItem *toolbarItem = [[NSToolbarItem alloc] initWithItemIdentifier:[NSString stringWithFormat:@"light-%ld", (long)index]];
-            [toolbarItem setView:lightView];
-            [toolbarItem setLabel:[light title]];
-            [toolbarItem setToolTip:[light tooltip]];
-            
-            [lightToolbarItems addObject:toolbarItem];
-
-            index++;
-        }
-
-        _lightToolbarItems = lightToolbarItems;
-        _nameToLightViewMap = nameToLightViewMap;
-    }
-
     _selectedProject = project;
 
     NSString *UUIDString = [[project UUID] UUIDString];
@@ -406,19 +365,6 @@ static NSString * const sSelectedProjectUUID = @"SelectedProjectUUID";
         IssueEvent *issueEvent = (IssueEvent *)event;
        
         [_logView appendIssueWithPath:[issueEvent path] lineNumber:[issueEvent lineNumber] issueString:[issueEvent issueString]];
-    
-    } else if ([type isEqualToString:EventTypeLight]) {
-        LightEvent *lightEvent = (LightEvent *)event;
-
-        NSString  *lightColor = [lightEvent colorString];
-        NSString  *lightName  = [lightEvent lightName];
-        LightView *lightView  = [_nameToLightViewMap objectForKey:lightName];
-    
-        if (lightView) {
-            [lightView setColor:GetColorForString(lightColor)];
-        } else {
-            appendInternal(NSLocalizedString(@"Unknown light: ", nil), [event string]);
-        }
     
     } else if ([type isEqualToString:EventTypeInternal]) {
         appendInternal(NSLocalizedString(@"Parse error: ", nil), [event string]);

@@ -50,13 +50,7 @@ static NSArray *GetTypeMap()
         @"$.actions[].title",          JSONTypeString,
         @"$.actions[].command",        JSONTypeString,
         @"$.actions[].tooltip",        JSONTypeString,
-        @"$.actions[].icon",           JSONTypeString,
-
-        @"$.lights",                   JSONTypeArray,
-        @"$.lights[]",                 JSONTypeDictionary,
-        @"$.lights[].name",            JSONTypeString,
-        @"$.lights[].title",           JSONTypeString,
-        @"$.lights[].tooltip",         JSONTypeString
+        @"$.actions[].icon",           JSONTypeString
     ];
     
     return result;
@@ -69,7 +63,6 @@ static NSArray *GetTypeMap()
 @property (atomic) NSString *path;
 @property (atomic) NSArray *targets;
 @property (atomic) NSArray *actions;
-@property (atomic) NSArray *lights;
 @property (atomic) ProjectStatus status;
 @property (atomic) NSError *error;
 @end
@@ -81,10 +74,6 @@ static NSArray *GetTypeMap()
 @end
 
 @interface ProjectAction ()
-- (id) _initWithDictionary:(NSDictionary *)dictionary;
-@end
-
-@interface ProjectLight ()
 - (id) _initWithDictionary:(NSDictionary *)dictionary;
 @end
 
@@ -176,14 +165,12 @@ static NSArray *GetTypeMap()
     
     NSArray  *targetDictionaries = [root objectForKey:@"targets"];
     NSArray  *actionDictionaries = [root objectForKey:@"actions"];
-    NSArray  *lightDictionaries  = [root objectForKey:@"lights"];
 
     NSString       *name         = [root objectForKey:@"name"];
     NSDictionary   *environment  = [root objectForKey:@"env"];
 
     NSMutableArray *targets = [NSMutableArray array];
     NSMutableArray *actions = [NSMutableArray array];
-    NSMutableArray *lights  = [NSMutableArray array];
 
     for (NSDictionary *targetDictionary in targetDictionaries) {
         [targets addObject:[[ProjectTarget alloc] _initWithDictionary:targetDictionary]];
@@ -192,16 +179,11 @@ static NSArray *GetTypeMap()
     for (NSDictionary *actionDictionary in actionDictionaries) {
         [actions addObject:[[ProjectAction alloc] _initWithDictionary:actionDictionary]];
     }
-
-    for (NSDictionary *lightDictionary in lightDictionaries) {
-        [lights addObject:[[ProjectLight alloc] _initWithDictionary:lightDictionary]];
-    }
  
     [self setName:name];
     [self setEnvironment:environment];
     [self setTargets:targets];
     [self setActions:actions];
-    [self setLights:lights];
     [self setStatus:ProjectStatusValid];
     [self setError:nil];
     
@@ -322,20 +304,3 @@ static NSArray *GetTypeMap()
 }
 
 @end
-
-
-@implementation ProjectLight
-
-- (id) _initWithDictionary:(NSDictionary *)dictionary
-{
-    if ((self = [super init])) {
-        _name  = [dictionary objectForKey:@"name"];
-        _title = [dictionary objectForKey:@"title"];
-    }
-    
-    return self;
-}
-
-@end
-
-

@@ -29,7 +29,6 @@ NSString * const EventTypeReset    = @"reset";
 NSString * const EventTypeMark     = @"mark";
 NSString * const EventTypeMessage  = @"message";
 NSString * const EventTypeInfo     = @"info";
-NSString * const EventTypeLight    = @"light";
 NSString * const EventTypeIssue    = @"issue";
 NSString * const EventTypeInternal = @"internal";
 
@@ -57,22 +56,6 @@ NSString * const EventTypeInternal = @"internal";
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self _saveToDictionary:dictionary];
     return dictionary;
-}
-
-@end
-
-
-@implementation LightEvent
-
-- (void) _saveToDictionary:(NSMutableDictionary *)dictionary
-{
-    [super _saveToDictionary:dictionary];
-
-    NSString *name  = [self lightName];
-    NSString *color = [self colorString];
-    
-    if (name)  [dictionary setObject:name  forKey:@"name"];
-    if (color) [dictionary setObject:color forKey:@"color"];
 }
 
 @end

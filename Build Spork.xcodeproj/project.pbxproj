@@ -19,7 +19,6 @@
 		5530D8301A6E6FCD00CFEBE9 /* ViewerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5530D82F1A6E6FCD00CFEBE9 /* ViewerWindowController.m */; };
 		5530D8331A6E6FDA00CFEBE9 /* ViewerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5530D8311A6E6FDA00CFEBE9 /* ViewerWindow.xib */; };
 		555EAB411A6F34450042A4B6 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB401A6F34450042A4B6 /* Utils.m */; };
-		555EAB481A6F3E180042A4B6 /* LightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB471A6F3E180042A4B6 /* LightView.m */; };
 		555EAB4B1A6F415F0042A4B6 /* TaskRun.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB4A1A6F415F0042A4B6 /* TaskRun.m */; };
 		555EAB801A6F5C7E0042A4B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 555EAB7F1A6F5C7E0042A4B6 /* WebKit.framework */; };
 		555EAB881A7071B00042A4B6 /* OutputParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 555EAB871A7071B00042A4B6 /* OutputParser.m */; };
@@ -55,8 +54,6 @@
 		555EAB3F1A6F34450042A4B6 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = Source/Utils.h; sourceTree = "<group>"; };
 		555EAB401A6F34450042A4B6 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utils.m; path = Source/Utils.m; sourceTree = "<group>"; };
 		555EAB421A6F34690042A4B6 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = Source/Prefix.pch; sourceTree = SOURCE_ROOT; };
-		555EAB461A6F3E180042A4B6 /* LightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightView.h; path = Source/LightView.h; sourceTree = "<group>"; };
-		555EAB471A6F3E180042A4B6 /* LightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightView.m; path = Source/LightView.m; sourceTree = "<group>"; };
 		555EAB491A6F415F0042A4B6 /* TaskRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskRun.h; path = Source/TaskRun.h; sourceTree = "<group>"; };
 		555EAB4A1A6F415F0042A4B6 /* TaskRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskRun.m; path = Source/TaskRun.m; sourceTree = "<group>"; };
 		555EAB7F1A6F5C7E0042A4B6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -175,8 +172,6 @@
 		555EAB431A6F3DF30042A4B6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				555EAB461A6F3E180042A4B6 /* LightView.h */,
-				555EAB471A6F3E180042A4B6 /* LightView.m */,
 				555EAB921A70BA560042A4B6 /* FontPreviewField.h */,
 				555EAB931A70BA560042A4B6 /* FontPreviewField.m */,
 				555EAB981A71CE8A0042A4B6 /* LogView.h */,
@@ -275,7 +270,6 @@
 				555EAB941A70BA560042A4B6 /* FontPreviewField.m in Sources */,
 				5530D8161A6E568B00CFEBE9 /* Project.m in Sources */,
 				5530D8191A6E569200CFEBE9 /* ProjectsWindowController.m in Sources */,
-				555EAB481A6F3E180042A4B6 /* LightView.m in Sources */,
 				5530D8221A6E666300CFEBE9 /* JSONTypechecker.m in Sources */,
 				555EAB4B1A6F415F0042A4B6 /* TaskRun.m in Sources */,
 				555EAB881A7071B00042A4B6 /* OutputParser.m in Sources */,

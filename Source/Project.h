@@ -45,7 +45,6 @@ typedef NS_ENUM(NSInteger, ProjectStatus) {
 
 @property (readonly) NSArray *targets;
 @property (readonly) NSArray *actions;
-@property (readonly) NSArray *lights;
 
 @property (readonly) ProjectStatus status;
 @property (readonly) NSError *error;
@@ -74,11 +73,3 @@ typedef NS_ENUM(NSInteger, ProjectStatus) {
 
 @end
 
-
-@interface ProjectLight : NSObject
-
-@property (readonly) NSString *name;
-@property (readonly) NSString *title;
-@property (readonly) NSString *tooltip;
-
-@end

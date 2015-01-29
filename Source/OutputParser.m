@@ -38,8 +38,6 @@
     
     __block Class      cls          = [Event class];
     __block NSString  *type         = EventTypeMessage;
-    __block NSString  *lightColor   = nil;
-    __block NSString  *lightName    = nil;
     __block NSString  *path         = nil;
     __block NSInteger  lineNumber   = NSNotFound;
     __block NSInteger  columnNumber = NSNotFound;
@@ -82,21 +80,6 @@
                 string = [[words subarrayWithRange:NSMakeRange(2, count - 2)] componentsJoinedByString:@" "];
             }
         
-        } else if ([command isEqualToString:@"light"]) {
-            cls  = [LightEvent class];
-            type = EventTypeLight;
-
-            lightName  = count > 2 ? [words objectAtIndex:2] : nil;
-            lightColor = nil;
-            
-            if (count > 3) {
-                lightColor = [[words subarrayWithRange:NSMakeRange(3, count - 3)] componentsJoinedByString:@" "];
-            }
-            
-            if (!lightName || !lightColor) {
-                type = EventTypeInternal;
-            }
-
         } else {
             type = EventTypeInternal;
         }
@@ -135,13 +118,7 @@
     [event setString:string];
     [event setLocation:(fromStandardError ? EventLocationErrorStream : EventLocationOutputStream)];
 
-    if ([event isKindOfClass:[LightEvent class]]) {
-        LightEvent *lightEvent = (LightEvent *)event;
-    
-        [lightEvent setColorString:lightColor];
-        [lightEvent setLightName:lightName];
-
-    } else if ([event isKindOfClass:[IssueEvent class]]) {
+    if ([event isKindOfClass:[IssueEvent class]]) {
         IssueEvent *issueEvent = (IssueEvent *)event;
         
         [issueEvent setPath:path];
